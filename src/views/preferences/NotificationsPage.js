@@ -49,10 +49,7 @@ function NotificationsPage() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "flex-start",
     alignItems: "center",
-    paddingTop: 50,
   },
   textContainer: {
     width: 327,
@@ -65,7 +62,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 40,
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",
@@ -74,7 +71,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 56,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 18,
     lineHeight: 28,
     textAlign: "right",
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
     height: 48,
     width: 327,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 16,
     lineHeight: 24,
     borderColor: "#DCDCE5",

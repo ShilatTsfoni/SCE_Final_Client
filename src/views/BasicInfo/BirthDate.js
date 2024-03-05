@@ -1,15 +1,55 @@
 import { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+} from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import DatePicker from "@react-native-community/datetimepicker";
 
 function BirthDate() {
   const navigation = useNavigation();
 
   const [BirthDate, setBirthDate] = useState("");
-  const [isValidBirthDate, setIsValidBirthDate] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // Function to validate the date format (dd/mm/yyyy)
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(Platform.OS === "ios"); // Hide date picker on iOS after selection
+    if (selectedDate) {
+      setBirthDate(selectedDate);
+      setIsButtonDisabled(false);
+    }
+  };
+
+  const handleTextInputPress = () => {
+    setShowDatePicker(true);
+  };
+
+  const handleConfirm = () => {
+    setShowDatePicker(false);
+  };
+
+  const handleNextScreen = () => {
+    if (BirthDate) {
+      navigation.navigate("City");
+    }
+  };
+
+  const formatDate = (date) => {
+    if (!date) return "";
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  /* // Function to validate the date format (dd/mm/yyyy)
   const isValidDateFormat = (date) => {
     const dateFormat = /^\d{2}\/\d{2}\/\d{4}$/;
     return dateFormat.test(date);
@@ -45,7 +85,7 @@ function BirthDate() {
     } else {
       console.log("Valid date entered:", formattedDate);
     }
-  };
+  }; */
 
   return (
     <View style={styles.container}>
@@ -56,23 +96,33 @@ function BirthDate() {
         </Text>
       </View>
       <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={handleBirthDateChange}
-          value={BirthDate}
-          placeholder="תאריך לידה"
-          maxLength={10}
-        />
+        <TouchableOpacity onPress={handleTextInputPress}>
+          <Text style={styles.input}>
+            {BirthDate ? formatDate(BirthDate) : "תאריך לידה"}
+          </Text>
+        </TouchableOpacity>
+        {showDatePicker && (
+          <View>
+            <DatePicker
+              testID="datePicker"
+              value={BirthDate || new Date()}
+              mode="date"
+              display="spinner"
+              onChange={handleDateChange}
+              maximumDate={new Date()}
+              dateFormat="DD/MM/YYYY"
+            />
+            <Button title="אישור" onPress={handleConfirm} />
+          </View>
+        )}
         <CustomButton
           style={styles.button}
           title="המשך"
-          onPress={() => {
-            navigation.navigate("City");
-          }}
-          buttonColor={isValidBirthDate ? "#1355CB" : "#B9B9C9"}
-          textColor={isValidBirthDate ? "#FFFFFF" : "#5C5C66"}
-          borderColor={isValidBirthDate ? "#1355CB" : "#B9B9C9"}
-          disabled={!isValidBirthDate}
+          onPress={handleNextScreen}
+          buttonColor={!isButtonDisabled ? "#1355CB" : "#B9B9C9"}
+          textColor={!isButtonDisabled ? "#FFFFFF" : "#5C5C66"}
+          borderColor={!isButtonDisabled ? "#1355CB" : "#B9B9C9"}
+          disabled={!isButtonDisabled}
         />
       </View>
     </View>
@@ -97,7 +147,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 40,
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",
@@ -106,7 +156,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 56,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 18,
     lineHeight: 28,
     textAlign: "right",
@@ -122,7 +172,7 @@ const styles = StyleSheet.create({
     height: 48,
     width: 327,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 16,
     lineHeight: 24,
     borderColor: "#DCDCE5",

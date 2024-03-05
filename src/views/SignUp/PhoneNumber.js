@@ -8,9 +8,14 @@ function PhoneNumber() {
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const navigation = useNavigation();
 
+  const validatePhoneNumber = (phone) => {
+    const regex = /^05\d([-]{0,1})\d{7}$/;
+    return regex.test(phone);
+  };
+
   const handlePhoneNumberChange = (phone) => {
     setPhoneNumber(phone);
-    setIsValidPhoneNumber(phone.length === 10);
+    setIsValidPhoneNumber(validatePhoneNumber(phone));
   };
 
   const handleButtonPress = () => {
@@ -70,7 +75,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 40,
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",
@@ -79,7 +84,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 28,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 18,
     lineHeight: 28,
     textAlign: "right",
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
     height: 48,
     width: 327,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 16,
     lineHeight: 24,
     borderColor: "#DCDCE5",

@@ -17,6 +17,12 @@ function ImportancePage() {
     console.log(selectedImportance);
   };
 
+  const handleContinue = () => {
+    if (Importance) {
+      navigation.navigate("NotificationsPage");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
@@ -86,9 +92,7 @@ function ImportancePage() {
         <CustomButton
           style={styles.button}
           title="המשך"
-          onPress={() => {
-            navigation.navigate("NotificationsPage");
-          }}
+          onPress={handleContinue}
           buttonColor={isButtonEnabled ? "#1355CB" : "#B9B9C9"}
           textColor={isButtonEnabled ? "#FFFFFF" : "#5C5C66"}
           borderColor={isButtonEnabled ? "#1355CB" : "#B9B9C9"}
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 80,
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",

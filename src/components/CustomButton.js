@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: "Assistant",
     fontSize: 16,
-    fontWeight: 600,
+    fontWeight: "600",
     textAlign: "center",
     lineHeight: 24,
   },

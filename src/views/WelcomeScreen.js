@@ -47,7 +47,7 @@ function WelcomeScreen() {
             color="#838383"
             fontFamily="Assistant"
             fontSize="12"
-            fontWeight="400"
+            // fontWeight="400"
             lineHeight="16"
           />
           <Text style={styles.condText}>
@@ -77,14 +77,14 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: "Caravan",
-    //fontWeight: 900,
+    fontWeight: "900",
     fontSize: 40,
     alignContent: "center",
     color: "#1355CB",
   },
   content: {
     fontFamily: "Assistant",
-    //fontWeight: 600,
+    fontWeight: "600",
     fontSize: 16,
     alignContent: "center",
     color: "#919191",
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   signText: {
     fontFamily: "Assistant",
-    //fontWeight: 400,
+    fontWeight: "400",
     fontSize: 18,
     alignContent: "center",
     lineHeight: 28,
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     color: "#838383",
     fontFamily: "Assistant",
     fontSize: 12,
-    //fontWeight: 400,
+    fontWeight: "400",
     lineHeight: 16,
   },
 });

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 
@@ -13,20 +13,38 @@ function PersonalDetails() {
 
   const handleFirstNameChange = (firstName) => {
     setFirstName(firstName);
+    checkAllFieldsEntered();
   };
 
   const handleLastNameChange = (lastName) => {
     setLastName(lastName);
+    checkAllFieldsEntered();
   };
 
   const handleEmailChange = (email) => {
     setEmail(email);
+    checkAllFieldsEntered();
+  };
+
+  const checkAllFieldsEntered = () => {
+    const isFirstNameValid =
+      /^[\u0590-\u05FF]+$/.test(FirstName) || /^[a-zA-Z]+$/.test(FirstName);
+    const isLastNameValid =
+      /^[\u0590-\u05FF]+$/.test(LastName) || /^[a-zA-Z]+$/.test(LastName);
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(Email);
+
+    if (isFirstNameValid && isLastNameValid && isEmailValid) {
+      setIsEnteredInfo(true);
+    } else {
+      setIsEnteredInfo(false);
+    }
   };
 
   const handleSubmit = () => {
-    if (FirstName.length > 0 && LastName.length > 0 && Email.length > 0) {
-      setIsEnteredInfo(true);
+    if (isEnteredInfo) {
       navigation.navigate("Gender");
+    } else {
+      Alert.alert("Invalid Input", "Please enter valid details.");
     }
   };
 
@@ -56,6 +74,7 @@ function PersonalDetails() {
           value={Email}
           placeholder="כתובת מייל"
           inputMode="email"
+          keyboardType="email-address"
         />
         <CustomButton
           style={styles.button}
@@ -86,7 +105,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 40,
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",
@@ -102,7 +121,7 @@ const styles = StyleSheet.create({
     height: 48,
     width: 327,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 16,
     lineHeight: 24,
     borderColor: "#DCDCE5",

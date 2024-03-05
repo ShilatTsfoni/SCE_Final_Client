@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 16,
     lineHeight: 24,
     textAlign: "right",

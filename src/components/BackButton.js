@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#5C5C66",
     fontFamily: "Assistant",
-    fontWeight: 600,
+    fontWeight: "600",
     fontSize: 16,
     lineHeight: 24,
     alignSelf: "flex-end",

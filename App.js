@@ -1,6 +1,8 @@
 import { StyleSheet } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
 import AuthNavigator from "./src/navigations/AuthNavigator";
 
 const theme = {
@@ -12,13 +14,22 @@ const theme = {
 };
 
 export default function App() {
-  const [fontsLoaded, fontError] = useFonts({
-    Caravan: require("./assets/fonts/caravan/aaa-fonts/caravan-90-aaa.otf"),
-    Assistant: require("./assets/fonts/assistant/Assistant-VariableFont_wght.ttf"),
+  const [fontsLoaded] = useFonts({
+    Caravan: require("./assets/fonts/caravan-90-aaa.otf"),
+    Assistant: require("./assets/fonts/Assistant-VariableFont_wght.ttf"),
   });
 
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+
   if (!fontsLoaded) {
-    return null;
+    return undefined;
+  } else {
+    SplashScreen.hideAsync();
   }
 
   return (

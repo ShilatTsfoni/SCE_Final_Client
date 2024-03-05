@@ -59,7 +59,6 @@ function ConfirmationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
     alignItems: "center",
     paddingTop: 50,
   },
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 80,
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "center",
@@ -94,7 +93,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 28,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 18,
     lineHeight: 28,
     textAlign: "right",
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 28,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 18,
     lineHeight: 28,
     textAlign: "right",
@@ -119,7 +118,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: 327,
     height: 128,
-    top: 400,
+    top: 300,
     gap: 8,
     alignContent: "center",
   },

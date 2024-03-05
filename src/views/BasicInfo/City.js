@@ -19,9 +19,15 @@ function City() {
   ];
 
   const handleCityNameChange = (city) => {
-    setCityName(city.value);
-    setIsEnteredCityName(city.value !== "");
+    setCityName(city);
+    setIsEnteredCityName(true);
     console.log("Selected city: ", city);
+  };
+
+  const handleContinue = () => {
+    if (CityName) {
+      navigation.navigate("StartPage");
+    }
   };
 
   return (
@@ -36,20 +42,18 @@ function City() {
         <SelectList
           placeholder="עיר מגורים"
           searchPlaceholder="חיפוש"
-          setSelected={(city) => handleCityNameChange(city)}
+          setSelected={handleCityNameChange}
           data={cities}
           save="value"
           fontFamily="Assistant"
           boxStyles={styles.input}
           dropdownItemStyles={styles.dropdown}
-          arrowAlign="right"
+          arrowAlign="left"
         />
         <CustomButton
           style={styles.button}
           title="המשך"
-          onPress={() => {
-            navigation.navigate("StartPage");
-          }}
+          onPress={handleContinue}
           buttonColor={isEnteredCityName ? "#1355CB" : "#B9B9C9"}
           textColor={isEnteredCityName ? "#FFFFFF" : "#5C5C66"}
           borderColor={isEnteredCityName ? "#1355CB" : "#B9B9C9"}
@@ -78,7 +82,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 40,
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",
@@ -87,7 +91,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 56,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 18,
     lineHeight: 28,
     textAlign: "right",
@@ -103,7 +107,7 @@ const styles = StyleSheet.create({
     height: 48,
     width: 327,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 16,
     lineHeight: 24,
     borderColor: "#DCDCE5",
@@ -116,17 +120,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dropdown: {
+    flexDirection: "row-reverse", // Align dropdown items from right to left
+    justifyContent: "space-between", // Spread items horizontally
     height: 48,
     width: 327,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 16,
     lineHeight: 24,
     padding: 12,
     gap: 8,
-    textAlign: "right",
-    alignItems: "flex-end",
+    alignItems: "center",
   },
+
   button: {
     width: 327,
     height: 48,
