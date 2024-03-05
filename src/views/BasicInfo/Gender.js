@@ -36,7 +36,7 @@ function Gender() {
           iconRight
           onIconPress={() => handleCheckboxChange("female")}
           size={16}
-          fontWeight={600}
+          fontWeight="600"
           lineHeight={24}
           title="אני מתנדבת 💃"
           uncheckedColor="#DCDCE5"
@@ -54,6 +54,7 @@ function Gender() {
           iconRight
           onIconPress={() => handleCheckboxChange("male")}
           size={16}
+          fontWeight="600"
           title="אני מתנדב 🕺"
           uncheckedColor="#DCDCE5"
           borderRadius={4}
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 40,
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 28,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 18,
     lineHeight: 28,
     textAlign: "right",

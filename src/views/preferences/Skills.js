@@ -17,6 +17,12 @@ function Skills() {
     console.log(selectedSkill);
   };
 
+  const handleContinue = () => {
+    if (Skill) {
+      navigation.navigate("ImportancePage");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
@@ -39,7 +45,7 @@ function Skills() {
           iconRight
           onIconPress={() => handleCheckboxChange("handyman")}
           size={16}
-          fontWeight={600}
+          fontWeight="600"
           lineHeight={24}
           title="דברים עם הידיים: לארוז, לסדר וכו׳"
           uncheckedColor="#DCDCE5"
@@ -57,7 +63,7 @@ function Skills() {
           iconRight
           onIconPress={() => handleCheckboxChange("logistics")}
           size={16}
-          fontWeight={600}
+          fontWeight="600"
           lineHeight={24}
           title="לוגיסטיקה: לנסוע, להביא, להחזיר, לשנע"
           uncheckedColor="#DCDCE5"
@@ -75,7 +81,7 @@ function Skills() {
           iconRight
           onIconPress={() => handleCheckboxChange("peoples")}
           size={16}
-          fontWeight={600}
+          fontWeight="600"
           lineHeight={24}
           title="אנשים: לנהל, להכיר, לגייס מתנדבים"
           uncheckedColor="#DCDCE5"
@@ -96,7 +102,7 @@ function Skills() {
           iconRight
           onIconPress={() => handleCheckboxChange("Sales and fundraising")}
           size={16}
-          fontWeight={600}
+          fontWeight="600"
           lineHeight={24}
           title="מכירות וגיוס תרומות"
           uncheckedColor="#DCDCE5"
@@ -117,7 +123,7 @@ function Skills() {
           iconRight
           onIconPress={() => handleCheckboxChange("Technology and computers")}
           size={16}
-          fontWeight={600}
+          fontWeight="600"
           lineHeight={24}
           title="טכנולוגיה ומחשבים"
           uncheckedColor="#DCDCE5"
@@ -126,9 +132,7 @@ function Skills() {
         <CustomButton
           style={styles.button}
           title="המשך"
-          onPress={() => {
-            navigation.navigate("ImportancePage");
-          }}
+          onPress={handleContinue}
           buttonColor={isButtonEnabled ? "#1355CB" : "#B9B9C9"}
           textColor={isButtonEnabled ? "#FFFFFF" : "#5C5C66"}
           borderColor={isButtonEnabled ? "#1355CB" : "#B9B9C9"}
@@ -144,7 +148,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    paddingTop: 50,
   },
   textContainer: {
     width: 327,
@@ -156,7 +159,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 80,
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
     width: 327,
     height: 56,
     fontFamily: "Assistant",
-    fontWeight: 400,
+    fontWeight: "400",
     fontSize: 18,
     lineHeight: 28,
     textAlign: "right",

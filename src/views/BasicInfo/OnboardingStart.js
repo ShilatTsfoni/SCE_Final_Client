@@ -29,10 +29,7 @@ function OnboardingStart() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "flex-start",
     alignItems: "center",
-    paddingTop: 50,
   },
   textContainer: {
     width: 327,
@@ -42,7 +39,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: "Caravan",
-    fontWeight: 900,
+    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",
