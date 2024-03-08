@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import AuthNavigator from "./src/navigations/AuthNavigator";
-
+//hello
 const theme = {
   ...DefaultTheme,
   colors: {
