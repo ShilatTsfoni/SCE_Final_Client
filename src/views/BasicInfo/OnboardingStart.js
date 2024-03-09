@@ -1,7 +1,6 @@
 import { View, Text, Button, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-
 function OnboardingStart() {
   const navigation = useNavigation();
 

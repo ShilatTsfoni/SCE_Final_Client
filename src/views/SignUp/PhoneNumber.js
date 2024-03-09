@@ -20,9 +20,33 @@ function PhoneNumber() {
 
   const handleButtonPress = () => {
     if (isValidPhoneNumber) {
-      navigation.navigate("OTP");
+      // Define the URL of your Django REST API
+      const url = 'http://10.0.2.2:8000/api/account/register/'; // Adjust the IP and path as needed
+
+      // Prepare the data you want to send in the POST request
+      const data = {
+        phone: PhoneNumber, // Make sure the key matches your Django serializer field
+      };
+
+      // Send the POST request
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        navigation.navigate("OTP",{phone:PhoneNumber});
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
     }
   };
+
 
   /*const handleSubmit = () => {
     console.log("Submitted phone number: ", PhoneNumber);

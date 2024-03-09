@@ -1,10 +1,11 @@
-import { StyleSheet } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthNavigator from "./src/navigations/AuthNavigator";
-//hello
+
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -18,32 +19,52 @@ export default function App() {
     Caravan: require("./assets/fonts/caravan-90-aaa.otf"),
     Assistant: require("./assets/fonts/Assistant-VariableFont_wght.ttf"),
   });
+  const [initialRouteName, setInitialRouteName] = useState('WelcomeScreen');
+  const [isReady, setIsReady] = useState(false); // New state to manage readiness
 
   useEffect(() => {
     async function prepare() {
-      await SplashScreen.preventAutoHideAsync();
-    }
-    prepare();
-  }, []);
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        const token = await AsyncStorage.getItem('userToken');
+        console.log("Token check:", token ? `Found: ${token}` : "Not found");
 
-  if (!fontsLoaded) {
-    return undefined;
-  } else {
-    SplashScreen.hideAsync();
+        if (token) {
+          setInitialRouteName('OnboardingStart');
+        }
+      } catch (error) {
+        console.error("An error occurred during app preparation:", error);
+      } finally {
+        // Move fontsLoaded check and splash screen hiding into finally block
+        if (fontsLoaded) {
+          await SplashScreen.hideAsync();
+          setIsReady(true); // Only set ready when everything is loaded
+        }
+      }
+    }
+
+    prepare();
+  }, [fontsLoaded]);
+
+  if (!isReady) { // Use isReady to control the rendering
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
   return (
     <NavigationContainer theme={theme}>
-      <AuthNavigator />
+      <AuthNavigator initialRouteName={initialRouteName} />
     </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  loaderContainer: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
