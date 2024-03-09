@@ -19,9 +19,10 @@ import ConfirmationScreen from "../views/ConfirmationScreen";
 
 const Stack = createNativeStackNavigator();
 
-function AuthNavigator() {
+function AuthNavigator({ initialRouteName }) {
   return (
     <Stack.Navigator
+      initialRouteName={initialRouteName} // Accept initialRouteName dynamically
       screenOptions={{
         headerTransparent: true,
         headerShown: true,
