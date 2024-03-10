@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { useFonts } from "expo-font";
+import * as Font from 'expo-font'; // Import the Font module
 import * as SplashScreen from "expo-splash-screen";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthNavigator from "./src/navigations/AuthNavigator";
@@ -15,38 +15,47 @@ const theme = {
 };
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    Caravan: require("./assets/fonts/caravan-90-aaa.otf"),
-    Assistant: require("./assets/fonts/Assistant-VariableFont_wght.ttf"),
-  });
   const [initialRouteName, setInitialRouteName] = useState('WelcomeScreen');
-  const [isReady, setIsReady] = useState(false); // New state to manage readiness
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
+      let fontsLoadedSuccessfully = false;
       try {
         await SplashScreen.preventAutoHideAsync();
-        const token = await AsyncStorage.getItem('userToken');
-        console.log("Token check:", token ? `Found: ${token}` : "Not found");
 
+        // Manually load fonts
+        await Font.loadAsync({
+          Caravan: require("./assets/fonts/caravan_90_aaa.otf"),
+          Assistant: require("./assets/fonts/assistant_variablefont_wght.ttf"),
+        });
+        fontsLoadedSuccessfully = true; // Set this flag to true after fonts are loaded
+
+        const token = await AsyncStorage.getItem('userToken');
         if (token) {
           setInitialRouteName('OnboardingStart');
         }
+        
+        setTimeout(() => {
+          if (!fontsLoadedSuccessfully) {
+            console.warn('Fonts not loaded within expected time. Proceeding with app...');
+          }
+          setIsReady(true);
+        }, 5000); // This timeout serves as a fallback
       } catch (error) {
         console.error("An error occurred during app preparation:", error);
       } finally {
-        // Move fontsLoaded check and splash screen hiding into finally block
-        if (fontsLoaded) {
+        if (fontsLoadedSuccessfully) {
           await SplashScreen.hideAsync();
-          setIsReady(true); // Only set ready when everything is loaded
+          setIsReady(true);
         }
       }
     }
-
+  
     prepare();
-  }, [fontsLoaded]);
+  }, []); // Removed the dependency on fontsLoaded
 
-  if (!isReady) { // Use isReady to control the rendering
+  if (!isReady) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
