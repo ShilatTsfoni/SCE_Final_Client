@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: "Caravan",
-    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",

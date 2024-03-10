@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "Caravan",
-    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "center",
