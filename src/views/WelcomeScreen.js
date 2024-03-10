@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: "Caravan",
-    fontWeight: "900",
     fontSize: 40,
     alignContent: "center",
     color: "#1355CB",
