@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
     width: 327,
     height: 40,
     fontFamily: "Caravan",
-    fontWeight: "900",
     fontSize: 36,
     lineHeight: 40,
     textAlign: "right",
