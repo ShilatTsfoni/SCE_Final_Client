@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import * as Font from 'expo-font'; // Import the Font module
+import * as Font from 'expo-font';
 import * as SplashScreen from "expo-splash-screen";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Ensure AsyncStorage is imported
+
 import AuthNavigator from "./src/navigations/AuthNavigator";
+import TokenProvider from './src/contexts/TokenProvider'; // Import the TokenProvider
 
 const theme = {
   ...DefaultTheme,
@@ -20,40 +22,32 @@ export default function App() {
 
   useEffect(() => {
     async function prepare() {
-      let fontsLoadedSuccessfully = false;
       try {
         await SplashScreen.preventAutoHideAsync();
-
-        // Manually load fonts
         await Font.loadAsync({
+          // Font assets
           Caravan: require("./assets/fonts/caravan_90_aaa.otf"),
           Assistant: require("./assets/fonts/assistant_variablefont_wght.ttf"),
         });
-        fontsLoadedSuccessfully = true; // Set this flag to true after fonts are loaded
 
+        // Fetch the token from AsyncStorage
         const token = await AsyncStorage.getItem('userToken');
         if (token) {
-          setInitialRouteName('OnboardingStart');
+          setInitialRouteName('OnboardingStart'); // Adjust based on your app's logic
+        } else {
+          setInitialRouteName('WelcomeScreen');
         }
-        
-        setTimeout(() => {
-          if (!fontsLoadedSuccessfully) {
-            console.warn('Fonts not loaded within expected time. Proceeding with app...');
-          }
-          setIsReady(true);
-        }, 5000); // This timeout serves as a fallback
+
+        setIsReady(true);
+        await SplashScreen.hideAsync();
       } catch (error) {
-        console.error("An error occurred during app preparation:", error);
-      } finally {
-        if (fontsLoadedSuccessfully) {
-          await SplashScreen.hideAsync();
-          setIsReady(true);
-        }
+        console.warn("An error occurred during app preparation:", error);
+        setIsReady(true); // Ensure readiness in case of error
       }
     }
   
     prepare();
-  }, []); // Removed the dependency on fontsLoaded
+  }, []);
 
   if (!isReady) {
     return (
@@ -64,9 +58,11 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer theme={theme}>
-      <AuthNavigator initialRouteName={initialRouteName} />
-    </NavigationContainer>
+    <TokenProvider>
+      <NavigationContainer theme={theme}>
+        <AuthNavigator initialRouteName={initialRouteName} />
+      </NavigationContainer>
+    </TokenProvider>
   );
 }
 

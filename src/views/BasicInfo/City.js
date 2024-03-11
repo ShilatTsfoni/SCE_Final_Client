@@ -4,7 +4,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 
-function City() {
+function City({route}) {
   const navigation = useNavigation();
 
   const [CityName, setCityName] = useState("");
@@ -26,7 +26,8 @@ function City() {
 
   const handleContinue = () => {
     if (CityName) {
-      navigation.navigate("StartPage");
+      const {first_name,last_name,email,gender,birth_day} = route.params;
+      navigation.navigate("StartPage",{first_name,last_name,email,gender,birth_day,city:CityName});
     }
   };
 

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CheckBox } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 
-function Gender() {
+function Gender({route}) {
   const navigation = useNavigation();
 
   const [Gender, setGender] = useState("");
@@ -63,7 +63,8 @@ function Gender() {
           style={styles.button}
           title="המשך"
           onPress={() => {
-            if (Gender.length > 0) navigation.navigate("BirthDate");
+            const {first_name,last_name,email} = route.params;
+            if (Gender.length > 0) navigation.navigate("BirthDate",{first_name,last_name,email,gender:Gender});
           }}
           buttonColor={isButtonEnabled ? "#1355CB" : "#B9B9C9"}
           textColor={isButtonEnabled ? "#FFFFFF" : "#5C5C66"}

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 
-function UploadProfilePicture() {
+function UploadProfilePicture({route}) {
   const navigation = useNavigation();
 
   const [Approval, setApproval] = useState("");

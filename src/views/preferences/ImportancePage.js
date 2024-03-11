@@ -5,7 +5,7 @@ import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import BackButton from "../../components/BackButton";
 
-function ImportancePage() {
+function ImportancePage({route}) {
   const navigation = useNavigation();
 
   const [Importance, setImportance] = useState("");
@@ -19,7 +19,8 @@ function ImportancePage() {
 
   const handleContinue = () => {
     if (Importance) {
-      navigation.navigate("NotificationsPage");
+      const {first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories} = route.params
+      navigation.navigate("NotificationsPage",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important:Importance});
     }
   };
 
