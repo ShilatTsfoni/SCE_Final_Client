@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 
-function StartPage() {
+function StartPage({route}) {
   const navigation = useNavigation();
 
   return (
@@ -16,7 +16,8 @@ function StartPage() {
           style={styles.button}
           title="קדימה כבר"
           onPress={() => {
-            navigation.navigate("Frequency");
+            const {first_name,last_name,email,gender,birth_day,city} = route.params
+            navigation.navigate("Frequency",{first_name,last_name,email,gender,birth_day,city});
           }}
           buttonColor={"#1355CB"}
           textColor={"#FFFFFF"}

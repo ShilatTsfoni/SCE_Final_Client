@@ -3,11 +3,11 @@ import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 
-function NotificationsPage() {
+function NotificationsPage({route}) {
   const navigation = useNavigation();
 
   const [Notifications, setNotifications] = useState("");
-
+  const {first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important} = route.params
   const handleNotificationsChange = (notifications) => {
     setNotifications(notifications);
   };
@@ -25,8 +25,9 @@ function NotificationsPage() {
         <CustomButton
           style={styles.button}
           title="אישור התראות"
-          onPress={() => {
-            //navigation.navigate("OTP");
+          onPress={() => {            
+            setNotifications(True)
+            navigation.navigate("SharingContacts",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important,allow_notifications:Notifications});
           }}
           buttonColor={"#1355CB"}
           textColor={"#FFFFFF"}
@@ -36,7 +37,8 @@ function NotificationsPage() {
           style={styles.button}
           title="לא כרגע"
           onPress={() => {
-            navigation.navigate("SharingContacts");
+            setNotifications(False)
+            navigation.navigate("SharingContacts",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important,allow_notifications:Notifications});
           }}
           buttonColor={"#FFFFFF"}
           textColor={"#5C5C66"}

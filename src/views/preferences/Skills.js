@@ -17,9 +17,10 @@ function Skills() {
     console.log(selectedSkill);
   };
 
-  const handleContinue = () => {
+  const handleContinue = ({route}) => {
     if (Skill) {
-      navigation.navigate("ImportancePage");
+      const {first_name,last_name,email,gender,birth_day,city,volunteer_frequency} = route.params
+      navigation.navigate("ImportancePage",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories:Skill});
     }
   };
 

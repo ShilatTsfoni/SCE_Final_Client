@@ -12,7 +12,7 @@ import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import DatePicker from "@react-native-community/datetimepicker";
 
-function BirthDate() {
+function BirthDate({route}) {
   const navigation = useNavigation();
 
   const [BirthDate, setBirthDate] = useState("");
@@ -37,7 +37,8 @@ function BirthDate() {
 
   const handleNextScreen = () => {
     if (BirthDate) {
-      navigation.navigate("City");
+      const {first_name,last_name,email,gender} = route.params;
+      navigation.navigate("City",{first_name,last_name,email,gender,birth_day:BirthDate});
     }
   };
 

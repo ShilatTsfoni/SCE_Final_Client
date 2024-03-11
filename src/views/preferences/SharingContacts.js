@@ -3,11 +3,11 @@ import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 
-function SharingContacts() {
+function SharingContacts({route}) {
   const navigation = useNavigation();
 
   const [Approval, setApproval] = useState("");
-
+  const {first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important,allow_notifications} = route.params
   const handleApprovalChange = (approval) => {
     setApproval(approval);
   };
@@ -36,7 +36,7 @@ function SharingContacts() {
           style={styles.button}
           title="לא כרגע"
           onPress={() => {
-            navigation.navigate("UploadProfilePicture");
+            navigation.navigate("UploadProfilePicture",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important,allow_notifications});
           }}
           buttonColor={"#FFFFFF"}
           textColor={"#5C5C66"}

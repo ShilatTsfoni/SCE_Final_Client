@@ -4,7 +4,7 @@ import { CheckBox } from "@rneui/themed";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 
-function Frequency() {
+function Frequency({route}) {
   const navigation = useNavigation();
 
   const [Frequency, setFrequency] = useState("");
@@ -18,7 +18,8 @@ function Frequency() {
 
   const handleContinue = () => {
     if (Frequency) {
-      navigation.navigate("Skills");
+      const {first_name,last_name,email,gender,birth_day,city} = route.params
+      navigation.navigate("Skills",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency:Frequency});
     }
   };
 

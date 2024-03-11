@@ -42,7 +42,8 @@ function PersonalDetails() {
 
   const handleSubmit = () => {
     if (isEnteredInfo) {
-      navigation.navigate("Gender");
+      console.log(FirstName + " " + LastName + " " + Email)
+      navigation.navigate("Gender",{first_name:FirstName,last_name:LastName,email:Email});
     } else {
       Alert.alert("Invalid Input", "Please enter valid details.");
     }
