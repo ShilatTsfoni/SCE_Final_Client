@@ -1,13 +1,19 @@
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
-function StartPage({route}) {
+function StartPage({ route }) {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>מעולה!</Text>
         <Text style={styles.heading}>נמשיך להעדפות ההתנדבות שלך</Text>
       </View>
@@ -16,8 +22,16 @@ function StartPage({route}) {
           style={styles.button}
           title="קדימה כבר"
           onPress={() => {
-            const {first_name,last_name,email,gender,birth_day,city} = route.params
-            navigation.navigate("Frequency",{first_name,last_name,email,gender,birth_day,city});
+            const { first_name, last_name, email, gender, birth_day, city } =
+              route.params;
+            navigation.navigate("Frequency", {
+              first_name,
+              last_name,
+              email,
+              gender,
+              birth_day,
+              city,
+            });
           }}
           buttonColor={"#1355CB"}
           textColor={"#FFFFFF"}

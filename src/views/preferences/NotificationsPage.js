@@ -2,12 +2,24 @@ import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
-function NotificationsPage({route}) {
+function NotificationsPage({ route }) {
   const navigation = useNavigation();
 
   const [Notifications, setNotifications] = useState("");
-  const {first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important} = route.params
+  const {
+    first_name,
+    last_name,
+    email,
+    gender,
+    birth_day,
+    city,
+    volunteer_frequency,
+    volunteer_categories,
+    most_important,
+  } = route.params;
   const handleNotificationsChange = (notifications) => {
     setNotifications(notifications);
   };
@@ -15,6 +27,10 @@ function NotificationsPage({route}) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>אישור התראות</Text>
         <Text style={styles.notificationText}>
           ככה נוכל להתריע לך לפני התנדבויות ושאר עדכונים חשובים (בלי לחפור,
@@ -25,9 +41,20 @@ function NotificationsPage({route}) {
         <CustomButton
           style={styles.button}
           title="אישור התראות"
-          onPress={() => {            
-            setNotifications(True)
-            navigation.navigate("SharingContacts",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important,allow_notifications:Notifications});
+          onPress={() => {
+            setNotifications(true);
+            navigation.navigate("SharingContacts", {
+              first_name,
+              last_name,
+              email,
+              gender,
+              birth_day,
+              city,
+              volunteer_frequency,
+              volunteer_categories,
+              most_important,
+              allow_notifications: Notifications,
+            });
           }}
           buttonColor={"#1355CB"}
           textColor={"#FFFFFF"}
@@ -37,8 +64,19 @@ function NotificationsPage({route}) {
           style={styles.button}
           title="לא כרגע"
           onPress={() => {
-            setNotifications(False)
-            navigation.navigate("SharingContacts",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important,allow_notifications:Notifications});
+            setNotifications(false);
+            navigation.navigate("SharingContacts", {
+              first_name,
+              last_name,
+              email,
+              gender,
+              birth_day,
+              city,
+              volunteer_frequency,
+              volunteer_categories,
+              most_important,
+              allow_notifications: Notifications,
+            });
           }}
           buttonColor={"#FFFFFF"}
           textColor={"#5C5C66"}
@@ -58,7 +96,6 @@ const styles = StyleSheet.create({
     height: 76,
     top: 116,
     gap: 8,
-    alignItems: "center",
   },
   heading: {
     width: 327,

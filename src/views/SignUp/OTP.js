@@ -5,8 +5,21 @@ import CustomMessage from "../../components/CustomMessage";
 import Processing from "./Processing";
 import { useNavigation } from "@react-navigation/native";
 import BackButton from "../../components/BackButton";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-function OTP({route}) {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export const handleLogout = async (navigation) => {
+  try {
+    // Clear user token from AsyncStorage
+    await AsyncStorage.removeItem("userToken");
+    // Navigate to WelcomeScreen
+    navigation.navigate("WelcomeScreen");
+    console.log("logged out successfully");
+  } catch (error) {
+    console.error("Error clearing user token:", error);
+  }
+};
+
+function OTP({ route }) {
   const [OtpNum, setOtp] = useState("");
   const [isValidOtp, setIsValidOtp] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -23,50 +36,51 @@ function OTP({route}) {
   const handleSubmit = () => {
     console.log("Submitted otp: ", OtpNum);
     setBusy(true);
-    const url = 'http://10.0.2.2:8000/api/account/verify-otp/'; // Adjust the IP and path as needed
+    const url = "http://10.0.2.2:8000/api/account/verify-otp/"; // Adjust the IP and path as needed
 
-// Prepare the data you want to send in the POST request
-const data = {
-  phone: phone,
-  otp: OtpNum, // Make sure the key matches your Django serializer field
-};
-fetch(url, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data),
-})
-.then(response => {
-  if (!response.ok) {
-    // This will handle client errors (e.g., 400) and server errors (e.g., 500)
-    console.log(response)
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-})
-.then(async data => {
-  // Perform additional validation on the response data if needed
-  if (data.token) { // Assuming your API returns a success field for valid responses
-    await AsyncStorage.setItem('userToken', data.token); // Save the token to AsyncStorage
-    console.log('Token saved successfully');
-    setIsValidOtp(true);
-    setBusy(false);
-    navigation.navigate("OnboardingStart");
-  } else {
-    // Handle case where API indicates failure but doesn't throw an error
-    console.log(data)
-    throw new Error('Validation failed on server');
-  }
-})
-.catch((error) => {
-  console.error('Error:', error);
-  setTimeout(() => {
-    setIsValidOtp(false);
-    setShowError(true);
-    setBusy(false);
-  }, 2000);
-});
+    // Prepare the data you want to send in the POST request
+    const data = {
+      phone: phone,
+      otp: OtpNum, // Make sure the key matches your Django serializer field
+    };
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          // This will handle client errors (e.g., 400) and server errors (e.g., 500)
+          console.log(response);
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(async (data) => {
+        // Perform additional validation on the response data if needed
+        if (data.token) {
+          // Assuming your API returns a success field for valid responses
+          await AsyncStorage.setItem("userToken", data.token); // Save the token to AsyncStorage
+          console.log("Token saved successfully");
+          setIsValidOtp(true);
+          setBusy(false);
+          navigation.navigate("OnboardingStart");
+        } else {
+          // Handle case where API indicates failure but doesn't throw an error
+          console.log(data);
+          throw new Error("Validation failed on server");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setTimeout(() => {
+          setIsValidOtp(false);
+          setShowError(true);
+          setBusy(false);
+        }, 2000);
+      });
   };
 
   return (
