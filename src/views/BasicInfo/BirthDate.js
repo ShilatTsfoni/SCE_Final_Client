@@ -11,8 +11,10 @@ import {
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import DatePicker from "@react-native-community/datetimepicker";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
-function BirthDate({route}) {
+function BirthDate({ route }) {
   const navigation = useNavigation();
 
   const [BirthDate, setBirthDate] = useState("");
@@ -37,8 +39,14 @@ function BirthDate({route}) {
 
   const handleNextScreen = () => {
     if (BirthDate) {
-      const {first_name,last_name,email,gender} = route.params;
-      navigation.navigate("City",{first_name,last_name,email,gender,birth_day:BirthDate});
+      const { first_name, last_name, email, gender } = route.params;
+      navigation.navigate("City", {
+        first_name,
+        last_name,
+        email,
+        gender,
+        birth_day: BirthDate,
+      });
     }
   };
 
@@ -91,6 +99,10 @@ function BirthDate({route}) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>תאריך לידה</Text>
         <Text style={styles.dateText}>
           אנחנו שואלים מאחר ויש התנדבויות לנוער והתנדבויות למבוגרים.
@@ -142,7 +154,6 @@ const styles = StyleSheet.create({
     height: 76,
     top: 116,
     gap: 8,
-    alignItems: "center",
   },
   heading: {
     width: 327,

@@ -1,11 +1,20 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { Entypo, AntDesign, MaterialIcons } from "@expo/vector-icons";
 import CustomButton from "../components/CustomButton";
+import LogoutButton from "../components/LogoutButton";
+import { handleLogout } from "./SignUp/OTP";
+import { useNavigation } from "@react-navigation/native";
 
 function ConfirmationScreen() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>הכל מוכן, צאו לדרך!</Text>
         <View style={styles.content}>
           <Text style={styles.textTitle}>אז מה עכשיו?</Text>
@@ -67,7 +76,6 @@ const styles = StyleSheet.create({
     height: 327,
     top: 92,
     gap: 32,
-    alignItems: "center",
   },
   heading: {
     width: 327,

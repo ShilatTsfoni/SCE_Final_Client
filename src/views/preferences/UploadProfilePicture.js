@@ -2,8 +2,10 @@ import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
-function UploadProfilePicture({route}) {
+function UploadProfilePicture({ route }) {
   const navigation = useNavigation();
 
   const [Approval, setApproval] = useState("");
@@ -16,6 +18,10 @@ function UploadProfilePicture({route}) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>נא לשפר הופעה ולהעלות תמונה!</Text>
         <Text style={styles.shareText}>
           שנוכל לראות מי המהממים והמדהימות הללו שבאים להתנדב ✨{" "}
@@ -58,7 +64,6 @@ const styles = StyleSheet.create({
     height: 76,
     top: 116,
     gap: 8,
-    alignItems: "center",
   },
   heading: {
     width: 327,

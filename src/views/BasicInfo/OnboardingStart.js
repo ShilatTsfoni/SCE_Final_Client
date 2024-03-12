@@ -1,12 +1,18 @@
 import { View, Text, Button, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-function OnboardingStart({route}) {
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
+function OnboardingStart({ route }) {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>הצלחה גדולה!</Text>
         <Text style={styles.heading}>מכאן ממשיכים לפרטים אישיים</Text>
       </View>

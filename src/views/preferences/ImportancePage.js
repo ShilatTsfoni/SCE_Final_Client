@@ -4,8 +4,10 @@ import { CheckBox } from "@rneui/themed";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import BackButton from "../../components/BackButton";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
-function ImportancePage({route}) {
+function ImportancePage({ route }) {
   const navigation = useNavigation();
 
   const [Importance, setImportance] = useState("");
@@ -19,15 +21,40 @@ function ImportancePage({route}) {
 
   const handleContinue = () => {
     if (Importance) {
-      const {first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories} = route.params
-      navigation.navigate("NotificationsPage",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important:Importance});
+      const {
+        first_name,
+        last_name,
+        email,
+        gender,
+        birth_day,
+        city,
+        volunteer_frequency,
+        volunteer_categories,
+      } = route.params;
+      navigation.navigate("NotificationsPage", {
+        first_name,
+        last_name,
+        email,
+        gender,
+        birth_day,
+        city,
+        volunteer_frequency,
+        volunteer_categories,
+        most_important: Importance,
+      });
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <BackButton onPress={() => navigation.goBack()} title={"חזרה"} />
+        <View style={styles.buttonContainer}>
+          <LogoutButton
+            onPress={() => handleLogout(navigation)}
+            title={"התנתק/י"}
+          />
+          <BackButton onPress={() => navigation.goBack()} title={"חזרה"} />
+        </View>
         <Text style={styles.heading}>מה הכי חשוב לך?</Text>
       </View>
       <View style={styles.selectContainer}>
@@ -116,6 +143,10 @@ const styles = StyleSheet.create({
     height: 40,
     top: 116,
     gap: 8,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   heading: {
     width: 327,

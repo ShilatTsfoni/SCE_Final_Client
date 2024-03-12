@@ -4,8 +4,10 @@ import { useState } from "react";
 import { CheckBox } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import BackButton from "../../components/BackButton";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
-function Skills() {
+function Skills({ route }) {
   const navigation = useNavigation();
 
   const [Skill, setSkill] = useState("");
@@ -17,17 +19,40 @@ function Skills() {
     console.log(selectedSkill);
   };
 
-  const handleContinue = ({route}) => {
+  const handleContinue = () => {
     if (Skill) {
-      const {first_name,last_name,email,gender,birth_day,city,volunteer_frequency} = route.params
-      navigation.navigate("ImportancePage",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories:Skill});
+      const {
+        first_name,
+        last_name,
+        email,
+        gender,
+        birth_day,
+        city,
+        volunteer_frequency,
+      } = route.params;
+      navigation.navigate("ImportancePage", {
+        first_name,
+        last_name,
+        email,
+        gender,
+        birth_day,
+        city,
+        volunteer_frequency,
+        volunteer_categories: Skill,
+      });
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <BackButton onPress={() => navigation.goBack()} title={"חזרה"} />
+        <View style={styles.buttonContainer}>
+          <LogoutButton
+            onPress={() => handleLogout(navigation)}
+            title={"התנתק/י"}
+          />
+          <BackButton onPress={() => navigation.goBack()} title={"חזרה"} />
+        </View>
         <Text style={styles.heading}>מה היית רוצה לעשות?</Text>
         <Text style={styles.skillText}>
           ציון הכישורים והיכולות שלך יעזור לנו להציע לך התנדבויות מתאימות.
@@ -155,6 +180,10 @@ const styles = StyleSheet.create({
     height: 76,
     top: 116,
     gap: 8,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   heading: {
     width: 327,

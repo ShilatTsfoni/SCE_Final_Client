@@ -2,6 +2,8 @@ import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
 function PersonalDetails() {
   const navigation = useNavigation();
@@ -42,8 +44,12 @@ function PersonalDetails() {
 
   const handleSubmit = () => {
     if (isEnteredInfo) {
-      console.log(FirstName + " " + LastName + " " + Email)
-      navigation.navigate("Gender",{first_name:FirstName,last_name:LastName,email:Email});
+      console.log(FirstName + " " + LastName + " " + Email);
+      navigation.navigate("Gender", {
+        first_name: FirstName,
+        last_name: LastName,
+        email: Email,
+      });
     } else {
       Alert.alert("Invalid Input", "Please enter valid details.");
     }
@@ -52,6 +58,10 @@ function PersonalDetails() {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>פרטים אישיים</Text>
       </View>
       <View style={styles.selectContainer}>

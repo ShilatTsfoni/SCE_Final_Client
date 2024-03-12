@@ -3,8 +3,10 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
-function City({route}) {
+function City({ route }) {
   const navigation = useNavigation();
 
   const [CityName, setCityName] = useState("");
@@ -26,14 +28,25 @@ function City({route}) {
 
   const handleContinue = () => {
     if (CityName) {
-      const {first_name,last_name,email,gender,birth_day} = route.params;
-      navigation.navigate("StartPage",{first_name,last_name,email,gender,birth_day,city:CityName});
+      const { first_name, last_name, email, gender, birth_day } = route.params;
+      navigation.navigate("StartPage", {
+        first_name,
+        last_name,
+        email,
+        gender,
+        birth_day,
+        city: CityName,
+      });
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>עיר מגורים</Text>
         <Text style={styles.cityText}>
           אנחנו שואלים כדי למצוא לך התנדבויות קרובות לבית.
@@ -77,7 +90,6 @@ const styles = StyleSheet.create({
     height: 76,
     top: 116,
     gap: 8,
-    alignItems: "center",
   },
   heading: {
     width: 327,

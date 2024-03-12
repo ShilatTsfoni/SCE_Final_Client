@@ -2,12 +2,25 @@ import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
-function SharingContacts({route}) {
+function SharingContacts({ route }) {
   const navigation = useNavigation();
 
   const [Approval, setApproval] = useState("");
-  const {first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important,allow_notifications} = route.params
+  const {
+    first_name,
+    last_name,
+    email,
+    gender,
+    birth_day,
+    city,
+    volunteer_frequency,
+    volunteer_categories,
+    most_important,
+    allow_notifications,
+  } = route.params;
   const handleApprovalChange = (approval) => {
     setApproval(approval);
   };
@@ -15,6 +28,10 @@ function SharingContacts({route}) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>שיתוף אנשי קשר</Text>
         <Text style={styles.shareText}>
           נראה לך פעילויות התנדבותיות שחברים וחברות שלך גם הולכים אליהן, שיהיה
@@ -36,7 +53,18 @@ function SharingContacts({route}) {
           style={styles.button}
           title="לא כרגע"
           onPress={() => {
-            navigation.navigate("UploadProfilePicture",{first_name,last_name,email,gender,birth_day,city,volunteer_frequency,volunteer_categories,most_important,allow_notifications});
+            navigation.navigate("UploadProfilePicture", {
+              first_name,
+              last_name,
+              email,
+              gender,
+              birth_day,
+              city,
+              volunteer_frequency,
+              volunteer_categories,
+              most_important,
+              allow_notifications,
+            });
           }}
           buttonColor={"#FFFFFF"}
           textColor={"#5C5C66"}
@@ -57,7 +85,6 @@ const styles = StyleSheet.create({
     height: 76,
     top: 116,
     gap: 8,
-    alignItems: "center",
   },
   heading: {
     width: 327,

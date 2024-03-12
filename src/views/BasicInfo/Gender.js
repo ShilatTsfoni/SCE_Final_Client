@@ -3,8 +3,10 @@ import CustomButton from "../../components/CustomButton";
 import { useState } from "react";
 import { CheckBox } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
-function Gender({route}) {
+function Gender({ route }) {
   const navigation = useNavigation();
 
   const [Gender, setGender] = useState("");
@@ -18,6 +20,10 @@ function Gender({route}) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
         <Text style={styles.heading}>מגדר</Text>
         <Text style={styles.genderText}>
           אנחנו שואלים כי יש התנדבויות בהן זהו נושא רגיש.
@@ -63,8 +69,14 @@ function Gender({route}) {
           style={styles.button}
           title="המשך"
           onPress={() => {
-            const {first_name,last_name,email} = route.params;
-            if (Gender.length > 0) navigation.navigate("BirthDate",{first_name,last_name,email,gender:Gender});
+            const { first_name, last_name, email } = route.params;
+            if (Gender.length > 0)
+              navigation.navigate("BirthDate", {
+                first_name,
+                last_name,
+                email,
+                gender: Gender,
+              });
           }}
           buttonColor={isButtonEnabled ? "#1355CB" : "#B9B9C9"}
           textColor={isButtonEnabled ? "#FFFFFF" : "#5C5C66"}
@@ -88,7 +100,6 @@ const styles = StyleSheet.create({
     height: 76,
     top: 116,
     gap: 8,
-    alignItems: "center",
   },
   heading: {
     width: 327,
