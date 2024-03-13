@@ -16,6 +16,8 @@ import NotificationsPage from "../views/preferences/NotificationsPage";
 import SharingContacts from "../views/preferences/SharingContacts";
 import UploadProfilePicture from "../views/preferences/UploadProfilePicture";
 import ConfirmationScreen from "../views/ConfirmationScreen";
+import HomePage from "../views/userViews/HomePage";
+import ActivityScreen from "../views/userViews/ActivityScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +50,9 @@ function AuthNavigator({ initialRouteName }) {
         component={UploadProfilePicture}
       />
       <Stack.Screen name="ConfirmationScreen" component={ConfirmationScreen} />
+      {/*need to remove to other navigator after setting all the user settings*/}
+      <Stack.Screen name="HomePage" component={HomePage} />
+      <Stack.Screen name="ActivityScreen" component={ActivityScreen} />
     </Stack.Navigator>
   );
 }

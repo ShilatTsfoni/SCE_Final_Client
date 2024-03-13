@@ -54,7 +54,7 @@ function ConfirmationScreen() {
           style={styles.button}
           title="קדימה 💪"
           onPress={() => {
-            //navigation.navigate("PhoneNumber");
+            navigation.navigate("HomePage");
           }}
           buttonColor={"#1355CB"}
           textColor={"#FFFFFF"}

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import * as Font from 'expo-font';
+import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Ensure AsyncStorage is imported
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Ensure AsyncStorage is imported
 
 import AuthNavigator from "./src/navigations/AuthNavigator";
-import TokenProvider from './src/contexts/TokenProvider'; // Import the TokenProvider
+import TokenProvider from "./src/contexts/TokenProvider"; // Import the TokenProvider
 
 const theme = {
   ...DefaultTheme,
@@ -17,7 +17,7 @@ const theme = {
 };
 
 export default function App() {
-  const [initialRouteName, setInitialRouteName] = useState('WelcomeScreen');
+  const [initialRouteName, setInitialRouteName] = useState("WelcomeScreen");
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -28,14 +28,15 @@ export default function App() {
           // Font assets
           Caravan: require("./assets/fonts/caravan_90_aaa.otf"),
           Assistant: require("./assets/fonts/assistant_variablefont_wght.ttf"),
+          Inter: require("./assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
         });
 
         // Fetch the token from AsyncStorage
-        const token = await AsyncStorage.getItem('userToken');
+        const token = await AsyncStorage.getItem("userToken");
         if (token) {
-          setInitialRouteName('OnboardingStart'); // Adjust based on your app's logic
+          setInitialRouteName("OnboardingStart"); // Adjust based on your app's logic
         } else {
-          setInitialRouteName('WelcomeScreen');
+          setInitialRouteName("WelcomeScreen");
         }
 
         setIsReady(true);
@@ -45,7 +46,7 @@ export default function App() {
         setIsReady(true); // Ensure readiness in case of error
       }
     }
-  
+
     prepare();
   }, []);
 
@@ -69,7 +70,7 @@ export default function App() {
 const styles = StyleSheet.create({
   loaderContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
