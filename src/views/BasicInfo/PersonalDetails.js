@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import LogoutButton from "../../components/LogoutButton";
 import { handleLogout } from "../SignUp/OTP";
 
-function PersonalDetails() {
+function PersonalDetails(route) {
   const navigation = useNavigation();
 
   const [FirstName, setFirstName] = useState("");

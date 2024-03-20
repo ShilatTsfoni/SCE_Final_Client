@@ -21,7 +21,7 @@ function OnboardingStart({ route }) {
           style={styles.button}
           title="המשך"
           onPress={() => {
-            navigation.navigate("PersonalDetails");
+            navigation.navigate("PersonalDetails", route);
           }}
           buttonColor={"#1355CB"}
           textColor={"#FFFFFF"}

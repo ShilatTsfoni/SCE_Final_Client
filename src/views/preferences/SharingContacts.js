@@ -43,7 +43,19 @@ function SharingContacts({ route }) {
           style={styles.button}
           title="שיתוף אנשי קשר"
           onPress={() => {
-            //navigation.navigate("OTP");
+            setApproval(true);
+            navigation.navigate("UploadProfilePicture", {
+              first_name,
+              last_name,
+              email,
+              gender,
+              birth_day,
+              city,
+              volunteer_frequency,
+              volunteer_categories,
+              most_important,
+              allow_notifications,
+            });
           }}
           buttonColor={"#1355CB"}
           textColor={"#FFFFFF"}

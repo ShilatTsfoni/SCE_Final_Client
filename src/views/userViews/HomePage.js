@@ -12,7 +12,7 @@ function HomePage() {
       id: "1",
       organizationName: 'חמ"ל נשות המילואים',
       location: "גמליאל 5, תל אביב",
-      date: "13.03.2024",
+      date: "15.03.2024",
       time: "16:00",
     },
     {

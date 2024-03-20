@@ -45,7 +45,7 @@ function BirthDate({ route }) {
         last_name,
         email,
         gender,
-        birth_day: BirthDate,
+        birth_day: formatDate(BirthDate),
       });
     }
   };
