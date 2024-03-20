@@ -11,6 +11,19 @@ function UploadProfilePicture({ route }) {
   const [Approval, setApproval] = useState("");
   const [isPictureUploaded, setIsPictureUploaded] = useState(false);
 
+  const {
+    first_name,
+    last_name,
+    email,
+    gender,
+    birth_day,
+    city,
+    volunteer_frequency,
+    volunteer_categories,
+    most_important,
+    allow_notifications,
+  } = route.params;
+
   const handleApprovalChange = (approval) => {
     setApproval(approval);
   };
@@ -43,7 +56,18 @@ function UploadProfilePicture({ route }) {
           style={styles.button}
           title="לא כרגע"
           onPress={() => {
-            navigation.navigate("ConfirmationScreen");
+            navigation.navigate("ConfirmationScreen", {
+              first_name,
+              last_name,
+              email,
+              gender,
+              birth_day,
+              city,
+              volunteer_frequency,
+              volunteer_categories,
+              most_important,
+              allow_notifications,
+            });
           }}
           buttonColor={"#FFFFFF"}
           textColor={"#5C5C66"}

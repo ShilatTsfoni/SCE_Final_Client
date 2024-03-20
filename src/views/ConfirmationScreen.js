@@ -1,12 +1,73 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Entypo, AntDesign, MaterialIcons } from "@expo/vector-icons";
 import CustomButton from "../components/CustomButton";
 import LogoutButton from "../components/LogoutButton";
 import { handleLogout } from "./SignUp/OTP";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useContext, useState } from "react";
+import { TokenContext } from "../contexts/TokenContext";
+// Import TokenContext if you plan to use it
+// import { TokenContext } from "../contexts/TokenContext";
 
-function ConfirmationScreen() {
+function ConfirmationScreen({ route }) {
   const navigation = useNavigation();
+  const [busy, setBusy] = useState(false);
+  const [showError, setShowError] = useState(false);
+  // If you plan to use the token from context, uncomment the next line
+  // const { token, setToken } = useContext(TokenContext);
+
+  const handleSubmit = async () => {
+    setBusy(true);
+    const token = await AsyncStorage.getItem("userToken"); // Proper declaration with const
+    console.log(token);
+    if (!token) {
+      console.log("No token found");
+      setBusy(false); // Ensure you update state accordingly
+      // Optionally navigate to a login screen or show a message
+      return;
+    }
+
+    const url = "http://10.0.2.2:8000/api/account/update/";
+    const data = {
+      first_name: route.first_name,
+      last_name: route.last_name,
+      email: route.email,
+      gender: route.gender,
+      birth_day: route.birth_day,
+      city: route.city,
+      volunteer_frequency: route.volunteer_frequency,
+      volunteer_categories: route.volunteer_categories,
+      most_important: route.most_important,
+      allow_notifications: route.allow_notifications,
+      finished_onboarding: true,
+    };
+
+    fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(async (responseData) => {
+        console.log("Success:", responseData);
+        setBusy(false);
+        navigation.navigate("HomePage");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setShowError(true); // Consider showing error feedback to the user
+        setBusy(false);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -53,9 +114,7 @@ function ConfirmationScreen() {
         <CustomButton
           style={styles.button}
           title="קדימה 💪"
-          onPress={() => {
-            navigation.navigate("HomePage");
-          }}
+          onPress={handleSubmit}
           buttonColor={"#1355CB"}
           textColor={"#FFFFFF"}
           borderColor={"#1355CB"}

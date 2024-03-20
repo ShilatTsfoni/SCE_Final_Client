@@ -10,17 +10,35 @@ import { handleLogout } from "../SignUp/OTP";
 function ImportancePage({ route }) {
   const navigation = useNavigation();
 
-  const [Importance, setImportance] = useState("");
+  const [Importances, setImportances] = useState([]);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
-  const handleCheckboxChange = (selectedImportance) => {
-    setImportance(selectedImportance);
-    setIsButtonEnabled(true);
-    console.log(selectedImportance);
+  // Mapping of Hebrew importance names to English
+  const importanceTranslations = {
+    "להתנדב עם חברים": "Friends",
+    "קרוב לבית": "Distance",
+    "לעסוק במקצוע או בכישורים שלי": "Profession",
+    'החמ"ל שלי': "Organization",
+  };
+
+  const handleCheckboxChange = (importance) => {
+    let updatedImportances;
+    if (Importances.includes(importance)) {
+      updatedImportances = Importances.filter((imp) => imp !== importance);
+    } else {
+      updatedImportances = [...Importances, importance];
+    }
+    setImportances(updatedImportances);
+    setIsButtonEnabled(updatedImportances.length > 0);
+
+    const translatedImportances = updatedImportances.map(
+      (imp) => importanceTranslations[imp]
+    );
+    console.log(translatedImportances);
   };
 
   const handleContinue = () => {
-    if (Importance) {
+    if (Importances.length > 0) {
       const {
         first_name,
         last_name,
@@ -31,6 +49,13 @@ function ImportancePage({ route }) {
         volunteer_frequency,
         volunteer_categories,
       } = route.params;
+
+      // Translate selected skills using the mapping object
+      const translatedImportances = Importances.map(
+        (importance) => importanceTranslations[importance]
+      );
+      console.log("Selected importances:", translatedImportances); // Log the selected skills in English
+
       navigation.navigate("NotificationsPage", {
         first_name,
         last_name,
@@ -40,7 +65,7 @@ function ImportancePage({ route }) {
         city,
         volunteer_frequency,
         volunteer_categories,
-        most_important: Importance,
+        most_important: translatedImportances.join(", "),
       });
     }
   };
@@ -58,64 +83,34 @@ function ImportancePage({ route }) {
         <Text style={styles.heading}>מה הכי חשוב לך?</Text>
       </View>
       <View style={styles.selectContainer}>
-        <CheckBox
-          right
-          checked={Importance === "Volunteer with friends"}
-          checkedColor="#FFFFFF"
-          containerStyle={[
-            styles.checkboxContainer,
-            {
-              borderColor:
-                Importance === "Volunteer with friends" ? "#1355CB" : "#B9B9C9",
-            },
-          ]}
-          fontFamily="Assistant"
-          onPress={() => handleCheckboxChange("Volunteer with friends")}
-          size={16}
-          title="להתנדב עם חברים"
-          uncheckedColor="#FFFFFF"
-          borderRadius={4}
-        />
-        <CheckBox
-          right
-          checked={Importance === "close to home"}
-          checkedColor="#FFFFFF"
-          containerStyle={[
-            styles.checkboxContainer,
-            {
-              borderColor:
-                Importance === "close to home" ? "#1355CB" : "#B9B9C9",
-            },
-          ]}
-          fontFamily="Assistant"
-          onPress={() => handleCheckboxChange("close to home")}
-          size={16}
-          title="קרוב לבית"
-          uncheckedColor="#FFFFFF"
-          borderRadius={4}
-        />
-        <CheckBox
-          right
-          checked={Importance === "practice my profession and skills"}
-          checkedColor="#FFFFFF"
-          containerStyle={[
-            styles.checkboxContainer,
-            {
-              borderColor:
-                Importance === "practice my profession and skills"
+        {/* Render CheckBox components dynamically based on an array of importances */}
+        {[
+          "להתנדב עם חברים",
+          "קרוב לבית",
+          "לעסוק במקצוע או בכישורים שלי",
+          'החמ"ל שלי',
+        ].map((importance) => (
+          <CheckBox
+            key={importance}
+            right
+            checked={Importances.includes(importance)}
+            checkedColor="#FFFFFF"
+            containerStyle={[
+              styles.checkboxContainer,
+              {
+                borderColor: Importances.includes(importance)
                   ? "#1355CB"
                   : "#B9B9C9",
-            },
-          ]}
-          fontFamily="Assistant"
-          onPress={() =>
-            handleCheckboxChange("practice my profession and skills")
-          }
-          size={16}
-          title="לעסוק במקצוע ובכישורים שלי"
-          uncheckedColor="#FFFFFF"
-          borderRadius={4}
-        />
+              },
+            ]}
+            fontFamily="Assistant"
+            onPress={() => handleCheckboxChange(importance)}
+            size={16}
+            title={importance}
+            uncheckedColor="#FFFFFF"
+            borderRadius={4}
+          />
+        ))}
 
         <CustomButton
           style={styles.button}
@@ -159,7 +154,7 @@ const styles = StyleSheet.create({
   selectContainer: {
     width: 327,
     height: 232,
-    top: 320,
+    top: 250,
     gap: 16,
     alignContent: "center",
   },

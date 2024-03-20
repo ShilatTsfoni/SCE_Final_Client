@@ -12,6 +12,13 @@ function Frequency({ route }) {
   const [Frequency, setFrequency] = useState("");
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
+  const FrequencyEnum = {
+    "once a week": 0,
+    "less than once a week": 1,
+    "more than once a week": 2,
+    "when needed": 3,
+  };
+
   const handleCheckboxChange = (selectedFrequency) => {
     setFrequency(selectedFrequency);
     setIsButtonEnabled(true);
@@ -29,7 +36,7 @@ function Frequency({ route }) {
         gender,
         birth_day,
         city,
-        volunteer_frequency: Frequency,
+        volunteer_frequency: FrequencyEnum[Frequency],
       });
     }
   };

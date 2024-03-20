@@ -10,17 +10,37 @@ import { handleLogout } from "../SignUp/OTP";
 function Skills({ route }) {
   const navigation = useNavigation();
 
-  const [Skill, setSkill] = useState("");
+  const [Skills, setSkills] = useState([]);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
+  // Mapping of Hebrew skill names to English
+  const skillTranslations = {
+    "לארוז חבילות": "Packaging",
+    "לחדש בתים": "Refurbishing",
+    "להסיע או לשנע": "Driving",
+    "לתרום ולמסור": "Handout",
+    לגייס: "Recruit",
+    "כיכר החטופים": "Advocacy",
+  };
+
   const handleCheckboxChange = (selectedSkill) => {
-    setSkill(selectedSkill); // Save the selected gender
-    setIsButtonEnabled(true); // Enable the button
-    console.log(selectedSkill);
+    let updatedSkills;
+    if (Skills.includes(selectedSkill)) {
+      updatedSkills = Skills.filter((skill) => skill !== selectedSkill);
+    } else {
+      updatedSkills = [...Skills, selectedSkill];
+    }
+    setSkills(updatedSkills);
+    setIsButtonEnabled(updatedSkills.length > 0);
+
+    const translatedSkills = updatedSkills.map(
+      (skill) => skillTranslations[skill]
+    );
+    console.log(translatedSkills);
   };
 
   const handleContinue = () => {
-    if (Skill) {
+    if (Skills.length > 0) {
       const {
         first_name,
         last_name,
@@ -30,6 +50,10 @@ function Skills({ route }) {
         city,
         volunteer_frequency,
       } = route.params;
+      // Translate selected skills using the mapping object
+      const translatedSkills = Skills.map((skill) => skillTranslations[skill]);
+      console.log("Selected skills:", translatedSkills); // Log the selected skills in English
+
       navigation.navigate("ImportancePage", {
         first_name,
         last_name,
@@ -38,7 +62,7 @@ function Skills({ route }) {
         birth_day,
         city,
         volunteer_frequency,
-        volunteer_categories: Skill,
+        volunteer_categories: translatedSkills.join(", "),
       });
     }
   };
@@ -59,102 +83,37 @@ function Skills({ route }) {
         </Text>
       </View>
       <View style={styles.inputContainer}>
-        <CheckBox
-          right
-          checked={Skill === "handyman"}
-          checkedColor="#1355CB"
-          containerStyle={[
-            styles.checkboxContainer,
-            { borderColor: Skill === "handyman" ? "#1355CB" : "#B9B9C9" },
-          ]}
-          fontFamily="Assistant"
-          iconRight
-          onIconPress={() => handleCheckboxChange("handyman")}
-          size={16}
-          fontWeight="600"
-          lineHeight={24}
-          title="דברים עם הידיים: לארוז, לסדר וכו׳"
-          uncheckedColor="#DCDCE5"
-          borderRadius={4}
-        />
-        <CheckBox
-          right
-          checked={Skill === "logistics"}
-          checkedColor="#1355CB"
-          containerStyle={[
-            styles.checkboxContainer,
-            { borderColor: Skill === "logistics" ? "#1355CB" : "#B9B9C9" },
-          ]}
-          fontFamily="Assistant"
-          iconRight
-          onIconPress={() => handleCheckboxChange("logistics")}
-          size={16}
-          fontWeight="600"
-          lineHeight={24}
-          title="לוגיסטיקה: לנסוע, להביא, להחזיר, לשנע"
-          uncheckedColor="#DCDCE5"
-          borderRadius={4}
-        />
-        <CheckBox
-          right
-          checked={Skill === "peoples"}
-          checkedColor="#1355CB"
-          containerStyle={[
-            styles.checkboxContainer,
-            { borderColor: Skill === "peoples" ? "#1355CB" : "#B9B9C9" },
-          ]}
-          fontFamily="Assistant"
-          iconRight
-          onIconPress={() => handleCheckboxChange("peoples")}
-          size={16}
-          fontWeight="600"
-          lineHeight={24}
-          title="אנשים: לנהל, להכיר, לגייס מתנדבים"
-          uncheckedColor="#DCDCE5"
-          borderRadius={4}
-        />
-        <CheckBox
-          right
-          checked={Skill === "Sales and fundraising"}
-          checkedColor="#1355CB"
-          containerStyle={[
-            styles.checkboxContainer,
-            {
-              borderColor:
-                Skill === "Sales and fundraising" ? "#1355CB" : "#B9B9C9",
-            },
-          ]}
-          fontFamily="Assistant"
-          iconRight
-          onIconPress={() => handleCheckboxChange("Sales and fundraising")}
-          size={16}
-          fontWeight="600"
-          lineHeight={24}
-          title="מכירות וגיוס תרומות"
-          uncheckedColor="#DCDCE5"
-          borderRadius={4}
-        />
-        <CheckBox
-          right
-          checked={Skill === "Technology and computers"}
-          checkedColor="#1355CB"
-          containerStyle={[
-            styles.checkboxContainer,
-            {
-              borderColor:
-                Skill === "Technology and computers" ? "#1355CB" : "#B9B9C9",
-            },
-          ]}
-          fontFamily="Assistant"
-          iconRight
-          onIconPress={() => handleCheckboxChange("Technology and computers")}
-          size={16}
-          fontWeight="600"
-          lineHeight={24}
-          title="טכנולוגיה ומחשבים"
-          uncheckedColor="#DCDCE5"
-          borderRadius={4}
-        />
+        {/* Render CheckBox components dynamically based on an array of skills */}
+        {[
+          "לארוז חבילות",
+          "לחדש בתים",
+          "להסיע או לשנע",
+          "לתרום ולמסור",
+          "לגייס",
+          "כיכר החטופים",
+        ].map((skill) => (
+          <CheckBox
+            key={skill}
+            right
+            checked={Skills.includes(skill)}
+            checkedColor="#1355CB"
+            containerStyle={[
+              styles.checkboxContainer,
+              {
+                borderColor: Skills.includes(skill) ? "#1355CB" : "#B9B9C9",
+              },
+            ]}
+            fontFamily="Assistant"
+            iconRight
+            onIconPress={() => handleCheckboxChange(skill)}
+            size={16}
+            fontWeight="600"
+            lineHeight={24}
+            title={skill}
+            uncheckedColor="#DCDCE5"
+            borderRadius={4}
+          />
+        ))}
         <CustomButton
           style={styles.button}
           title="המשך"
@@ -205,7 +164,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: 327,
     height: 108,
-    top: 250,
+    top: 230,
     gap: 12,
     alignContent: "center",
   },

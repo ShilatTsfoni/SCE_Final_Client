@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
@@ -11,14 +11,35 @@ function City({ route }) {
 
   const [CityName, setCityName] = useState("");
   const [isEnteredCityName, setIsEnteredCityName] = useState(false);
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    // Fetch cities data from the server
+    fetchCities();
+  }, []);
 
   // List of cities
-  const cities = [
+  /* const cities = [
     { label: "תל אביב", value: "תל אביב" },
     { label: "ירושלים", value: "ירושלים" },
     { label: "חיפה", value: "חיפה" },
     // Add more cities as needed
-  ];
+  ]; */
+
+  const fetchCities = async () => {
+    try {
+      const response = await fetch("http://10.0.2.2:8000/api/account/cities/");
+      if (response.ok) {
+        const data = await response.json();
+        // Update cities state with the fetched data
+        setCities(data);
+      } else {
+        console.error("Failed to fetch cities data");
+      }
+    } catch (error) {
+      console.error("Error fetching cities data:", error);
+    }
+  };
 
   const handleCityNameChange = (city) => {
     setCityName(city);

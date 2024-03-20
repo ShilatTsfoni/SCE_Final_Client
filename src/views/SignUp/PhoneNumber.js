@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 
@@ -21,32 +21,31 @@ function PhoneNumber() {
   const handleButtonPress = () => {
     if (isValidPhoneNumber) {
       // Define the URL of your Django REST API
-      const url = 'http://10.0.2.2:8000/api/account/register/'; // Adjust the IP and path as needed
+      const url = "http://10.0.2.2:8000/api/account/register/"; // Adjust the IP and path as needed
 
       // Prepare the data you want to send in the POST request
       const data = {
         phone: PhoneNumber, // Make sure the key matches your Django serializer field
       };
-
+      console.log(data);
       // Send the POST request
       fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        navigation.navigate("OTP",{phone:PhoneNumber});
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          navigation.navigate("OTP", { phone: PhoneNumber });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
   };
-
 
   /*const handleSubmit = () => {
     console.log("Submitted phone number: ", PhoneNumber);
