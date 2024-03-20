@@ -60,9 +60,11 @@ function OTP({ route }) {
       })
       .then(async (data) => {
         // Perform additional validation on the response data if needed
-        if (data.token) {
+        console.log(data)
+        if (data.token && data.user_id) {
           // Assuming your API returns a success field for valid responses
           await AsyncStorage.setItem("userToken", data.token); // Save the token to AsyncStorage
+          await AsyncStorage.setItem("user_id", data.user_id);
           console.log("Token saved successfully");
           setIsValidOtp(true);
           setBusy(false);

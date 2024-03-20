@@ -27,8 +27,14 @@ function ConfirmationScreen({ route }) {
       // Optionally navigate to a login screen or show a message
       return;
     }
-
-    const url = "http://10.0.2.2:8000/api/account/update/";
+    const user_id = await AsyncStorage.getItem("user_id");
+    if (!user_id) {
+      console.log("No id found");
+      setBusy(false); // Ensure you update state accordingly
+      // Optionally navigate to a login screen or show a message
+      return;
+    }
+    const url = "http://10.0.2.2:8000/api/account/update/" + user_id + "/";
     const data = {
       first_name: route.first_name,
       last_name: route.last_name,
