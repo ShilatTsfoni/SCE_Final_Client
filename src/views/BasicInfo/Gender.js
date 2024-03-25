@@ -32,15 +32,15 @@ function Gender({ route }) {
       <View style={styles.inputContainer}>
         <CheckBox
           right
-          checked={Gender === "female"}
+          checked={Gender === "F"}
           checkedColor="#1355CB"
           containerStyle={[
             styles.checkboxContainer,
-            { borderColor: Gender === "female" ? "#1355CB" : "#B9B9C9" },
+            { borderColor: Gender === "F" ? "#1355CB" : "#B9B9C9" },
           ]}
           fontFamily="Assistant"
           iconRight
-          onIconPress={() => handleCheckboxChange("female")}
+          onIconPress={() => handleCheckboxChange("F")}
           size={16}
           fontWeight="600"
           lineHeight={24}
@@ -50,15 +50,15 @@ function Gender({ route }) {
         />
         <CheckBox
           right
-          checked={Gender === "male"}
+          checked={Gender === "M"}
           checkedColor="#1355CB"
           containerStyle={[
             styles.checkboxContainer,
-            { borderColor: Gender === "male" ? "#1355CB" : "#B9B9C9" },
+            { borderColor: Gender === "M" ? "#1355CB" : "#B9B9C9" },
           ]}
           fontFamily="Assistant"
           iconRight
-          onIconPress={() => handleCheckboxChange("male")}
+          onIconPress={() => handleCheckboxChange("M")}
           size={16}
           fontWeight="600"
           title="אני מתנדב 🕺"

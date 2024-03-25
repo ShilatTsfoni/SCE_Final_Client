@@ -36,19 +36,19 @@ function ConfirmationScreen({ route }) {
     }
     const url = "http://10.0.2.2:8000/api/account/update/" + user_id + "/";
     const data = {
-      first_name: route.first_name,
-      last_name: route.last_name,
-      email: route.email,
-      gender: route.gender,
-      birth_day: route.birth_day,
-      city: route.city,
-      volunteer_frequency: route.volunteer_frequency,
-      volunteer_categories: route.volunteer_categories,
-      most_important: route.most_important,
-      allow_notifications: route.allow_notifications,
+      first_name: route.params.first_name,
+      last_name: route.params.last_name,
+      email: route.params.email,
+      gender: route.params.gender,
+      birth_day: route.params.birth_day,
+      city: route.params.city,
+      volunteer_frequency: route.params.volunteer_frequency,
+      volunteer_categories: [route.params.volunteer_categories],
+      most_important: route.params.most_important,
+      allow_notifications: false,
       finished_onboarding: true,
     };
-
+    console.log(data)
     fetch(url, {
       method: "PATCH",
       headers: {
