@@ -56,6 +56,7 @@ function UploadProfilePicture({ route }) {
           style={styles.button}
           title="לא כרגע"
           onPress={() => {
+            console.log("PROFILE   " + first_name)
             navigation.navigate("ConfirmationScreen", {
               first_name,
               last_name,
