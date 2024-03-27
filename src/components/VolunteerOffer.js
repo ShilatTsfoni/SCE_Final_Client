@@ -15,12 +15,18 @@ function VolunteerOffer({
   location,
   date,
   time,
-  navigation,
   imageSource,
   id,
+  eventData,
 }) {
+  const navigation = useNavigation();
+
   const handlePress = () => {
-    navigation.navigate("ActivityScreen", id);
+    navigation.navigate("ActivityScreen", {
+      eventId: id,
+      source: "VolunteerOffer",
+      eventData: eventData,
+    });
   };
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
