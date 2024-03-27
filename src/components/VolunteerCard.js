@@ -1,7 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
 import CustomButton from "./CustomButton";
+import { useState } from "react";
+import PropTypes from "prop-types";
 
-function VolunteerCard({ organizationName, location, date, time, onPress }) {
+function VolunteerCard({
+  organizationName,
+  location,
+  date,
+  time,
+  navigation,
+  id,
+  eventData,
+}) {
+  const [approved, setApproved] = useState(false);
+
   const parseDate = (providedDate) => {
     const [day, month, year] = providedDate.split(".");
     return new Date(`${year}-${month}-${day}`);
@@ -37,9 +49,14 @@ function VolunteerCard({ organizationName, location, date, time, onPress }) {
       </Text>
       {is24HoursAhead(date) && (
         <CustomButton
-          style={styles.button}
           title="אשר הגעה"
-          onPress={onPress}
+          onPress={() => {
+            navigation.navigate("ActivityScreen", {
+              eventId: id,
+              source: "VolunteerCard",
+              eventData: eventData,
+            });
+          }}
           buttonColor={"#1355CB"}
           textColor={"#FFFFFF"}
           borderColor={"#1355CB"}

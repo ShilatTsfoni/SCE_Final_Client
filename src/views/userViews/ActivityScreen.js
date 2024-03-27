@@ -1,5 +1,5 @@
 import {
-  Button,
+  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
@@ -11,8 +11,95 @@ import ImagesSwipeSlide from "../../components/ImagesSwipeSlide";
 import { useState } from "react";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import LinkButton from "../../components/LinkButton";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import CustomButton from "../../components/CustomButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function ActivityScreen(id) {
+const screenWidth = Dimensions.get("window").width;
+const buttonWidth = (screenWidth - 16 * 3) / 2; // Subtracting padding and spacing between buttons
+
+function ActivityScreen() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { eventId, source, eventData } = route.params;
+  const [userId, setUserId] = useState("");
+
+  const handleApprove = async () => {
+    console.log("approved");
+    navigation.goBack();
+  };
+
+  const handleCancel = async () => {
+    try {
+      const user_id = await AsyncStorage.getItem("user_id");
+      if (!user_id) {
+        console.log("No id found");
+        return;
+      }
+      setUserId(user_id);
+      console.log("user id:", user_id);
+      console.log("event id:", eventId);
+      const data = {
+        user: userId,
+        event: eventId,
+        stsus: null,
+      };
+      const response = await fetch(
+        "http://10.0.2.2:8000/api/events/" + eventId + "/cancel/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      if (response.ok) {
+        console.log("Succesfully Canceled");
+        navigation.navigate("HomePage");
+      } else {
+        throw new Error("Failed to cancel the event");
+      }
+    } catch (error) {
+      console.error("Error canceling the event:", error.message);
+    }
+  };
+
+  const handleSignNow = async () => {
+    try {
+      const user_id = await AsyncStorage.getItem("user_id");
+      if (!user_id) {
+        console.log("No id found");
+        return;
+      }
+      setUserId(user_id);
+      console.log("user id:", user_id);
+      console.log("event id:", eventId);
+      const data = {
+        user: userId,
+        event: eventId,
+        stsus: null,
+      };
+      const response = await fetch(
+        "http://10.0.2.2:8000/api/events/" + eventId + "/apply/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      if (response.ok) {
+        console.log("Application successful");
+      } else {
+        throw new Error("Failed to apply to the event");
+      }
+    } catch (error) {
+      console.error("Error applying to event:", error.message);
+    }
+  };
+
   const images = [
     require("../../../assets/images/org1.png"),
     require("../../../assets/images/example.jpg"),
@@ -33,10 +120,10 @@ function ActivityScreen(id) {
           <View style={styles.namelogoContainer}>
             <View style={styles.headingContent}>
               <Text style={[styles.text, { fontWeight: "bold" }]}>
-                התנדבות בכיכר החטופים
+                {eventData[0]}
               </Text>
               <Text style={[styles.text, { fontWeight: "normal" }]}>
-                בונות אלטרנטיבה
+                {eventData[1]}
               </Text>
             </View>
             <Image
@@ -55,9 +142,7 @@ function ActivityScreen(id) {
         <View style={styles.infoContainer}>
           <View style={[styles.infotActivity, { height: 83 }]}>
             <Text style={styles.textheading}>על הפעילות</Text>
-            <Text style={styles.textContent}>
-              אחראי משמרת, ניהול כמה תחומים במקביל ועבודה בצוות רחב.{" "}
-            </Text>
+            <Text style={styles.textContent}>{eventData[5]}</Text>
           </View>
           <View style={styles.divider} />
           <View style={[styles.infotActivity, { height: 64 }]}>
@@ -73,7 +158,7 @@ function ActivityScreen(id) {
               />
             </View>
             <Text style={styles.textContent}>
-              24.03.2024 | יום ה' | 12:00-16:00{" "}
+              {eventData[2]} | יום ה' | {eventData[3]}-{eventData[4]}{" "}
             </Text>
           </View>
           <View style={styles.divider} />
@@ -127,14 +212,43 @@ function ActivityScreen(id) {
           <View style={styles.divider} />
           <View style={[styles.infotActivity, { height: 116 }]}>
             <Text style={styles.textheading}>על הארגון</Text>
-            <Text style={styles.textContent}>
-              בונות אלטרנטיבה הינה עמותה אקטיביסטית של נשים שתומכות בעזרה
-              למשפחות החטופים ובמגוון רחב של התנדבויות.{" "}
-            </Text>
+            <Text style={styles.textContent}>{eventData[6]}</Text>
           </View>
           <View style={styles.divider} />
         </View>
       </ScrollView>
+      {source === "VolunteerCard" && (
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="ביטול פעילות"
+            onPress={handleCancel}
+            buttonColor={"#FFFFFF"}
+            textColor={"#1355CB"}
+            borderColor={"#1355CB"}
+            style={styles.button}
+          />
+          <CustomButton
+            title="אגיע לפעילות"
+            onPress={handleApprove}
+            buttonColor={"#1355CB"}
+            textColor={"#FFFFFF"}
+            borderColor={"#1355CB"}
+            style={styles.button}
+          />
+        </View>
+      )}
+      {source === "VolunteerOffer" && (
+        <View style={{ width: 327, height: 48, left: 33, marginBottom: 5 }}>
+          <CustomButton
+            title="הירשם עכשיו"
+            onPress={handleSignNow}
+            buttonColor={"#1355CB"}
+            textColor={"#FFFFFF"}
+            borderColor={"#1355CB"}
+            style={styles.signButton}
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -222,6 +336,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    marginTop: 16,
+    marginBottom: 5,
+  },
+  button: {
+    width: buttonWidth,
+    height: 48,
+    borderRadius: 4,
+    padding: 12,
+    justifyContent: "center",
+  },
+  signButton: {
+    width: 327,
+    height: 48,
+    borderRadius: 4,
+    padding: 16,
   },
 });
 
