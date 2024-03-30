@@ -10,8 +10,11 @@ import { handleLogout } from "../SignUp/OTP";
 function ImportancePage({ route }) {
   const navigation = useNavigation();
 
-  const [Importances, setImportances] = useState([]);
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  // Updated to hold a single value for the current selection or null if none
+  const [importance, setImportance] = useState(null);
+  
+  // Update to enable the button if any importance is selected
+  const isButtonEnabled = Boolean(importance);
 
   // Mapping of Hebrew importance names to English
   const importanceTranslations = {
@@ -21,24 +24,13 @@ function ImportancePage({ route }) {
     'החמ"ל שלי': "Organization",
   };
 
-  const handleCheckboxChange = (importance) => {
-    let updatedImportances;
-    if (Importances.includes(importance)) {
-      updatedImportances = Importances.filter((imp) => imp !== importance);
-    } else {
-      updatedImportances = [...Importances, importance];
-    }
-    setImportances(updatedImportances);
-    setIsButtonEnabled(updatedImportances.length > 0);
-
-    const translatedImportances = updatedImportances.map(
-      (imp) => importanceTranslations[imp]
-    );
-    console.log(translatedImportances);
+  const handleCheckboxChange = (selectedImportance) => {
+    // Set the importance directly, allowing toggling off by reselecting
+    setImportance(importance === selectedImportance ? null : selectedImportance);
   };
 
   const handleContinue = () => {
-    if (Importances.length > 0) {
+    if (importance) {
       const {
         first_name,
         last_name,
@@ -50,11 +42,9 @@ function ImportancePage({ route }) {
         volunteer_categories,
       } = route.params;
 
-      // Translate selected skills using the mapping object
-      const translatedImportances = Importances.map(
-        (importance) => importanceTranslations[importance]
-      );
-      console.log("Selected importances:", translatedImportances); // Log the selected skills in English
+      // Only a single importance to translate and send
+      const translatedImportance = importanceTranslations[importance];
+      console.log("Selected importance:", translatedImportance); // Log the selected skill in English
 
       navigation.navigate("NotificationsPage", {
         first_name,
@@ -65,11 +55,10 @@ function ImportancePage({ route }) {
         city,
         volunteer_frequency,
         volunteer_categories,
-        most_important: translatedImportances.join(", "),
+        most_important: translatedImportance,
       });
     }
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
