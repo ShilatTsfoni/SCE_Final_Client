@@ -23,12 +23,20 @@ function ActivityScreen() {
   const route = useRoute();
   const { eventId, source, eventData } = route.params;
   const [userId, setUserId] = useState("");
-
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
   const handleApprove = async () => {
     console.log("approved");
     navigation.goBack();
   };
-
+  // Function to trigger the popup
+  const triggerPopup = () => {
+    console.log("popup")
+    setPopupVisible(true);
+    setTimeout(() => {
+      setPopupVisible(false);
+    }, 3000); // Disappear after 3 seconds
+  };
   const handleCancel = async () => {
     try {
       const user_id = await AsyncStorage.getItem("user_id");
@@ -91,6 +99,8 @@ function ActivityScreen() {
         }
       );
       if (response.ok) {
+        setPopupMessage("הרשמתך נקלטה והעוברה לאישור הארגון");
+        triggerPopup();
         console.log("Application successful");
       } else {
         throw new Error("Failed to apply to the event");
@@ -99,7 +109,7 @@ function ActivityScreen() {
       console.error("Error applying to event:", error.message);
     }
   };
-
+  
   const images = [
     require("../../../assets/images/org1.png"),
     require("../../../assets/images/example.jpg"),
@@ -217,6 +227,11 @@ function ActivityScreen() {
           <View style={styles.divider} />
         </View>
       </ScrollView>
+      {popupVisible && (
+    <View style={styles.popupContainer}>
+      <Text style={styles.popupText}>{popupMessage}</Text>
+    </View>
+  )}
       {source === "VolunteerCard" && (
         <View style={styles.buttonContainer}>
           <CustomButton
@@ -356,6 +371,22 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 4,
     padding: 16,
+  },
+  popupContainer: {
+    position: 'absolute',
+    bottom: 100, // Adjust as necessary
+    left: 20,
+    right: 20,
+    backgroundColor: '#000000', // Example color
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    zIndex: 1000, // Ensure it overlays other content
+  },
+  popupText: {
+    color: '#ffffff', // Example color
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
 

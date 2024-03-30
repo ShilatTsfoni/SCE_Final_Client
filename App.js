@@ -33,9 +33,12 @@ export default function App() {
 
         // Fetch the token from AsyncStorage
         const token = await AsyncStorage.getItem("userToken");
-        if (token) {
-          setInitialRouteName("OnboardingStart"); // Adjust based on your app's logic
-        } else {
+        const onbaording = await AsyncStorage.getItem("onboarding")
+        if (token && onbaording === "True") {
+          setInitialRouteName("HomePage"); // Adjust based on your app's logic
+        } else if(token) {
+          setInitialRouteName("OnboardingStart");
+        }else{
           setInitialRouteName("WelcomeScreen");
         }
 

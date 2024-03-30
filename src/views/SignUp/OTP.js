@@ -65,10 +65,16 @@ function OTP({ route }) {
           // Assuming your API returns a success field for valid responses
           await AsyncStorage.setItem("userToken", data.token); // Save the token to AsyncStorage
           await AsyncStorage.setItem("user_id", data.user_id);
+          await AsyncStorage.setItem("onboarding",data.onboarding)
           console.log("Token saved successfully");
           setIsValidOtp(true);
           setBusy(false);
-          navigation.navigate("OnboardingStart");
+          if(data.onboarding === "True"){
+            navigation.navigate("HomePage");
+          }else{
+            navigation.navigate("OnboardingStart");
+          }
+          
         } else {
           // Handle case where API indicates failure but doesn't throw an error
           console.log(data);
