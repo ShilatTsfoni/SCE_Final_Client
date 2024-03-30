@@ -18,6 +18,7 @@ import UploadProfilePicture from "../views/preferences/UploadProfilePicture";
 import ConfirmationScreen from "../views/ConfirmationScreen";
 import HomePage from "../views/userViews/HomePage";
 import ActivityScreen from "../views/userViews/ActivityScreen";
+import LoginPage from "../views/Login/LoginPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,7 @@ function AuthNavigator({ initialRouteName }) {
       }}
     >
       <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+      <Stack.Screen name="LoginPage" component={LoginPage} />
       <Stack.Screen name="PhoneNumber" component={PhoneNumber} />
       <Stack.Screen name="OTP" component={OTP} />
       <Stack.Screen name="OnboardingStart" component={OnboardingStart} />

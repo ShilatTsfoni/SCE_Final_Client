@@ -5,6 +5,8 @@ import imageExmp from "../../../assets/images/example.jpg";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LogoutButton from "../../components/LogoutButton";
+import { handleLogout } from "../SignUp/OTP";
 
 function HomePage() {
   const navigation = useNavigation();
@@ -201,6 +203,12 @@ function HomePage() {
 
   return (
     <View style={styles.container}>
+      <View style={{ left: 150 }}>
+        <LogoutButton
+          onPress={() => handleLogout(navigation)}
+          title={"התנתק/י"}
+        />
+      </View>
       {hasEvents && ( // Conditionally render NextVolunteeringData if user has events
         <View style={styles.nextVolunteeringContainer}>
           <View style={styles.headingContainer}>

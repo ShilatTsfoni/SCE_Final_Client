@@ -34,7 +34,9 @@ function WelcomeScreen() {
           <CustomButton
             style={styles.button}
             title="יש לי כבר חשבון 😇"
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate("LoginPage");
+            }}
             buttonColor={"#FFFFFF"}
             textColor={"#1355CB"}
             borderColor={"#1355CB"}
