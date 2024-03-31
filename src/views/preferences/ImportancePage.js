@@ -11,10 +11,10 @@ function ImportancePage({ route }) {
   const navigation = useNavigation();
 
   // Updated to hold a single value for the current selection or null if none
-  const [importance, setImportance] = useState(null);
-  
+  const [importance, setImportance] = useState("");
+
   // Update to enable the button if any importance is selected
-  const isButtonEnabled = Boolean(importance);
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
   // Mapping of Hebrew importance names to English
   const importanceTranslations = {
@@ -25,8 +25,9 @@ function ImportancePage({ route }) {
   };
 
   const handleCheckboxChange = (selectedImportance) => {
-    // Set the importance directly, allowing toggling off by reselecting
-    setImportance(importance === selectedImportance ? null : selectedImportance);
+    setImportance(selectedImportance);
+    setIsButtonEnabled(true);
+    console.log(selectedImportance);
   };
 
   const handleContinue = () => {
@@ -41,11 +42,6 @@ function ImportancePage({ route }) {
         volunteer_frequency,
         volunteer_categories,
       } = route.params;
-
-      // Only a single importance to translate and send
-      const translatedImportance = importanceTranslations[importance];
-      console.log("Selected importance:", translatedImportance); // Log the selected skill in English
-
       navigation.navigate("NotificationsPage", {
         first_name,
         last_name,
@@ -55,7 +51,7 @@ function ImportancePage({ route }) {
         city,
         volunteer_frequency,
         volunteer_categories,
-        most_important: translatedImportance,
+        most_important: importanceTranslations[importance],
       });
     }
   };
@@ -72,34 +68,79 @@ function ImportancePage({ route }) {
         <Text style={styles.heading}>מה הכי חשוב לך?</Text>
       </View>
       <View style={styles.selectContainer}>
-        {/* Render CheckBox components dynamically based on an array of importances */}
-        {[
-          "להתנדב עם חברים",
-          "קרוב לבית",
-          "לעסוק במקצוע או בכישורים שלי",
-          'החמ"ל שלי',
-        ].map((importance) => (
-          <CheckBox
-            key={importance}
-            right
-            checked={Importances.includes(importance)}
-            checkedColor="#FFFFFF"
-            containerStyle={[
-              styles.checkboxContainer,
-              {
-                borderColor: Importances.includes(importance)
+        <CheckBox
+          right
+          checked={importance === "להתנדב עם חברים"}
+          checkedColor="#FFFFFF"
+          containerStyle={[
+            styles.checkboxContainer,
+            {
+              borderColor:
+                importance === "להתנדב עם חברים" ? "#1355CB" : "#B9B9C9",
+            },
+          ]}
+          fontFamily="Assistant"
+          onPress={() => handleCheckboxChange("להתנדב עם חברים")}
+          size={16}
+          title="להתנדב עם חברים"
+          uncheckedColor="#FFFFFF"
+          borderRadius={4}
+        />
+        <CheckBox
+          right
+          checked={importance === "קרוב לבית"}
+          checkedColor="#FFFFFF"
+          containerStyle={[
+            styles.checkboxContainer,
+            {
+              borderColor: importance === "קרוב לבית" ? "#1355CB" : "#B9B9C9",
+            },
+          ]}
+          fontFamily="Assistant"
+          onPress={() => handleCheckboxChange("קרוב לבית")}
+          size={16}
+          title="קרוב לבית"
+          uncheckedColor="#FFFFFF"
+          borderRadius={4}
+        />
+        <CheckBox
+          right
+          checked={importance === "לעסוק במקצוע או בכישורים שלי"}
+          checkedColor="#FFFFFF"
+          containerStyle={[
+            styles.checkboxContainer,
+            {
+              borderColor:
+                importance === "לעסוק במקצוע או בכישורים שלי"
                   ? "#1355CB"
                   : "#B9B9C9",
-              },
-            ]}
-            fontFamily="Assistant"
-            onPress={() => handleCheckboxChange(importance)}
-            size={16}
-            title={importance}
-            uncheckedColor="#FFFFFF"
-            borderRadius={4}
-          />
-        ))}
+            },
+          ]}
+          fontFamily="Assistant"
+          onPress={() => handleCheckboxChange("לעסוק במקצוע או בכישורים שלי")}
+          size={16}
+          title="לעסוק במקצוע או בכישורים שלי"
+          uncheckedColor="#FFFFFF"
+          borderRadius={4}
+        />
+        <CheckBox
+          right
+          hideIcon
+          checked={importance === 'החמ"ל שלי'}
+          checkedColor="#FFFFFF"
+          containerStyle={[
+            styles.checkboxContainer,
+            {
+              borderColor: importance === 'החמ"ל שלי' ? "#1355CB" : "#B9B9C9",
+            },
+          ]}
+          fontFamily="Assistant"
+          onPress={() => handleCheckboxChange('החמ"ל שלי')}
+          size={16}
+          title='החמ"ל שלי'
+          uncheckedColor="#FFFFFF"
+          borderRadius={4}
+        />
 
         <CustomButton
           style={styles.button}
