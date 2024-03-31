@@ -48,7 +48,7 @@ function ActivityScreen() {
       console.log("user id:", user_id);
       console.log("event id:", eventId);
       const data = {
-        user: userId,
+        user: user_id,
         event: eventId,
         stsus: null,
       };
@@ -84,7 +84,7 @@ function ActivityScreen() {
       console.log("user id:", user_id);
       console.log("event id:", eventId);
       const data = {
-        user: userId,
+        user: user_id,
         event: eventId,
         stsus: null,
       };
@@ -103,7 +103,9 @@ function ActivityScreen() {
         triggerPopup();
         console.log("Application successful");
       } else {
-        throw new Error("Failed to apply to the event");
+        setPopupMessage("כבר בוצעה הרשמה להתנדבות זו");
+        triggerPopup();
+        console.log("Failed to apply to the event");
       }
     } catch (error) {
       console.error("Error applying to event:", error.message);

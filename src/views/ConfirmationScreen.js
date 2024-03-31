@@ -43,7 +43,7 @@ function ConfirmationScreen({ route }) {
       birth_day: route.params.birth_day,
       city: route.params.city,
       volunteer_frequency: route.params.volunteer_frequency,
-      volunteer_categories: [route.params.volunteer_categories],
+      volunteer_categories: route.params.volunteer_categories,
       most_important: route.params.most_important,
       allow_notifications: false,
       finished_onboarding: true,

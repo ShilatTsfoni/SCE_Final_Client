@@ -19,23 +19,19 @@ function Skills({ route }) {
     "לחדש בתים": "Refurbishing",
     "להסיע או לשנע": "Driving",
     "לתרום ולמסור": "Handout",
-    לגייס: "Recruit",
+    "לגייס": "Recruit",
     "כיכר החטופים": "Advocacy",
   };
-
   const handleCheckboxChange = (selectedSkill) => {
-    let updatedSkills;
-    if (Skills.includes(selectedSkill)) {
-      updatedSkills = Skills.filter((skill) => skill !== selectedSkill);
-    } else {
-      updatedSkills = [...Skills, selectedSkill];
-    }
-    setSkills(updatedSkills);
-    setIsButtonEnabled(updatedSkills.length > 0);
-
-    const translatedSkills = updatedSkills.map(
-      (skill) => skillTranslations[skill]
-    );
+    let updatedSkills = Skills.includes(selectedSkill) 
+      ? Skills.filter((skill) => skill !== selectedSkill) // Remove skill
+      : [...Skills, selectedSkill]; // Add skill
+  
+    setSkills(updatedSkills); // Update skills state
+    setIsButtonEnabled(updatedSkills.length > 0); // Enable/disable button
+  
+    // Translate and log updated skills
+    const translatedSkills = updatedSkills.map((skill) => skillTranslations[skill] || skill);
     console.log(translatedSkills);
   };
 
@@ -62,7 +58,7 @@ function Skills({ route }) {
         birth_day,
         city,
         volunteer_frequency,
-        volunteer_categories: translatedSkills.join(", "),
+        volunteer_categories: translatedSkills,
       });
     }
   };
