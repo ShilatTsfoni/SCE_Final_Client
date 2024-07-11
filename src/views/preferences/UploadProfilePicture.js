@@ -2,8 +2,8 @@ import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function UploadProfilePicture({ route }) {
   const navigation = useNavigation();
@@ -31,10 +31,10 @@ function UploadProfilePicture({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <LogoutButton
+        {/*  <LogoutButton
           onPress={() => handleLogout(navigation)}
           title={"התנתק/י"}
-        />
+        /> */}
         <Text style={styles.heading}>נא לשפר הופעה ולהעלות תמונה!</Text>
         <Text style={styles.shareText}>
           שנוכל לראות מי המהממים והמדהימות הללו שבאים להתנדב ✨{" "}
@@ -56,7 +56,7 @@ function UploadProfilePicture({ route }) {
           style={styles.button}
           title="לא כרגע"
           onPress={() => {
-            console.log("PROFILE   " + first_name)
+            console.log("PROFILE   " + first_name);
             navigation.navigate("ConfirmationScreen", {
               first_name,
               last_name,

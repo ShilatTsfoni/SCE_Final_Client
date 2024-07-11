@@ -3,16 +3,18 @@ import VolunteerCard from "../../components/VolunteerCard";
 import VolunteerOffer from "../../components/VolunteerOffer";
 import imageExmp from "../../../assets/images/example.jpg";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LogoutButton from "../../components/LogoutButton";
 import { handleLogout } from "../SignUp/OTP";
+import { AuthContext } from "../../contexts/AuthContext";
 
 function HomePage() {
   const navigation = useNavigation();
   const [nextVolunteeringData, setNextVolunteeringData] = useState([]); // State to hold next volunteering data
   const [volunteerOfferData, setVolunteerOfferData] = useState([]); // State to hold volunteer offer data
   const [hasEvents, setHasEvents] = useState(false); // State to track whether the user has events
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     fetchVolunteerData();
@@ -205,7 +207,7 @@ function HomePage() {
     <View style={styles.container}>
       <View style={{ left: 150 }}>
         <LogoutButton
-          onPress={() => handleLogout(navigation)}
+          onPress={() => handleLogout(setIsAuthenticated)}
           title={"התנתק/י"}
         />
       </View>

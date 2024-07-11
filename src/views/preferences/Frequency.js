@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TextInput } from "react-native";
 import { CheckBox } from "@rneui/themed";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function Frequency({ route }) {
   const navigation = useNavigation();
@@ -44,10 +44,10 @@ function Frequency({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <LogoutButton
+        {/* <LogoutButton
           onPress={() => handleLogout(navigation)}
           title={"התנתק/י"}
-        />
+        /> */}
         <Text style={styles.heading}>מהי זמינות ההתנדבות שלך?</Text>
       </View>
       <View style={styles.selectContainer}>

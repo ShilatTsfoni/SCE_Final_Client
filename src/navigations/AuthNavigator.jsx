@@ -16,46 +16,56 @@ import NotificationsPage from "../views/preferences/NotificationsPage";
 import SharingContacts from "../views/preferences/SharingContacts";
 import UploadProfilePicture from "../views/preferences/UploadProfilePicture";
 import ConfirmationScreen from "../views/ConfirmationScreen";
-import HomePage from "../views/userViews/HomePage";
-import ActivityScreen from "../views/userViews/ActivityScreen";
 import LoginPage from "../views/Login/LoginPage";
+/* import HomePage from "../views/userViews/HomePage";
+import ActivityScreen from "../views/userViews/ActivityScreen";
+import SearchScreen from "../views/userViews/SearchScreen";
+import SettingsScreen from "../views/userViews/SettingsScreen";
+ */
+const AuthStack = createNativeStackNavigator();
 
-const Stack = createNativeStackNavigator();
-
-function AuthNavigator({ initialRouteName }) {
+function AuthNavigator() {
   return (
-    <Stack.Navigator
-      initialRouteName={initialRouteName} // Accept initialRouteName dynamically
+    <AuthStack.Navigator
+      initialRouteName={WelcomeScreen} // Accept initialRouteName dynamically
       screenOptions={{
         headerTransparent: true,
         headerShown: true,
         animation: "slide_from_right",
       }}
     >
-      <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-      <Stack.Screen name="LoginPage" component={LoginPage} />
-      <Stack.Screen name="PhoneNumber" component={PhoneNumber} />
-      <Stack.Screen name="OTP" component={OTP} />
-      <Stack.Screen name="OnboardingStart" component={OnboardingStart} />
-      <Stack.Screen name="PersonalDetails" component={PersonalDetails} />
-      <Stack.Screen name="Gender" component={Gender} />
-      <Stack.Screen name="BirthDate" component={BirthDate} />
-      <Stack.Screen name="City" component={City} />
-      <Stack.Screen name="StartPage" component={StartPage} />
-      <Stack.Screen name="Frequency" component={Frequency} />
-      <Stack.Screen name="Skills" component={Skills} />
-      <Stack.Screen name="ImportancePage" component={ImportancePage} />
-      <Stack.Screen name="NotificationsPage" component={NotificationsPage} />
-      <Stack.Screen name="SharingContacts" component={SharingContacts} />
-      <Stack.Screen
+      <AuthStack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+      <AuthStack.Screen name="LoginPage" component={LoginPage} />
+      <AuthStack.Screen name="PhoneNumber" component={PhoneNumber} />
+      <AuthStack.Screen name="OTP" component={OTP} />
+      <AuthStack.Screen name="OnboardingStart" component={OnboardingStart} />
+      <AuthStack.Screen name="PersonalDetails" component={PersonalDetails} />
+      <AuthStack.Screen name="Gender" component={Gender} />
+      <AuthStack.Screen name="BirthDate" component={BirthDate} />
+      <AuthStack.Screen name="City" component={City} />
+      <AuthStack.Screen name="StartPage" component={StartPage} />
+      <AuthStack.Screen name="Frequency" component={Frequency} />
+      <AuthStack.Screen name="Skills" component={Skills} />
+      <AuthStack.Screen name="ImportancePage" component={ImportancePage} />
+      <AuthStack.Screen
+        name="NotificationsPage"
+        component={NotificationsPage}
+      />
+      <AuthStack.Screen name="SharingContacts" component={SharingContacts} />
+      <AuthStack.Screen
         name="UploadProfilePicture"
         component={UploadProfilePicture}
       />
-      <Stack.Screen name="ConfirmationScreen" component={ConfirmationScreen} />
+      <AuthStack.Screen
+        name="ConfirmationScreen"
+        component={ConfirmationScreen}
+      />
       {/*need to remove to other navigator after setting all the user settings*/}
-      <Stack.Screen name="HomePage" component={HomePage} />
+      {/* <Stack.Screen name="HomePage" component={HomePage} />
       <Stack.Screen name="ActivityScreen" component={ActivityScreen} />
-    </Stack.Navigator>
+      <Stack.Screen name="SearchScreen" component={SearchScreen} />
+      <Stack.Screen name="SettingsScreen" component={SettingsScreen} /> */}
+    </AuthStack.Navigator>
   );
 }
 

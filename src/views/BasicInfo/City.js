@@ -3,8 +3,8 @@ import { View, Text, StyleSheet } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function City({ route }) {
   const navigation = useNavigation();
@@ -64,10 +64,10 @@ function City({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <LogoutButton
+        {/* <LogoutButton
           onPress={() => handleLogout(navigation)}
           title={"התנתק/י"}
-        />
+        /> */}
         <Text style={styles.heading}>עיר מגורים</Text>
         <Text style={styles.cityText}>
           אנחנו שואלים כדי למצוא לך התנדבויות קרובות לבית.

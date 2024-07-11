@@ -2,8 +2,8 @@ import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function PersonalDetails(route) {
   const navigation = useNavigation();
@@ -58,10 +58,10 @@ function PersonalDetails(route) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <LogoutButton
+        {/* <LogoutButton
           onPress={() => handleLogout(navigation)}
           title={"התנתק/י"}
-        />
+        /> */}
         <Text style={styles.heading}>פרטים אישיים</Text>
       </View>
       <View style={styles.selectContainer}>
