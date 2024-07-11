@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { useContext, useState } from "react";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import CustomMessage from "../../components/CustomMessage";
 import Processing from "./Processing";
 import { useNavigation } from "@react-navigation/native";
 import BackButton from "../../components/BackButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../../contexts/AuthContext";
 
-export const handleLogout = async (navigation) => {
+export const handleLogout = async (setIsAuthenticated) => {
   try {
     // Clear user token from AsyncStorage
     await AsyncStorage.removeItem("userToken");
-    // Navigate to WelcomeScreen
-    navigation.navigate("WelcomeScreen");
+    setIsAuthenticated(false);
     console.log("logged out successfully");
   } catch (error) {
     console.error("Error clearing user token:", error);
@@ -26,6 +26,7 @@ function OTP({ route }) {
   const [busy, setBusy] = useState(false);
   const { phone } = route.params;
   const navigation = useNavigation();
+  const { setIsAuthenticated } = useContext(AuthContext);
 
   const handleOtpChange = (otp) => {
     setOtp(otp);
@@ -70,7 +71,7 @@ function OTP({ route }) {
           setIsValidOtp(true);
           setBusy(false);
           if (data.onboarding === "True") {
-            navigation.navigate("HomePage");
+            setIsAuthenticated(true);
           } else {
             navigation.navigate("OnboardingStart");
           }

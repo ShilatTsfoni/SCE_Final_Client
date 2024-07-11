@@ -4,8 +4,8 @@ import { useState } from "react";
 import { CheckBox } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import BackButton from "../../components/BackButton";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function Skills({ route }) {
   const navigation = useNavigation();
@@ -19,19 +19,21 @@ function Skills({ route }) {
     "לחדש בתים": "Refurbishing",
     "להסיע או לשנע": "Driving",
     "לתרום ולמסור": "Handout",
-    "לגייס": "Recruit",
+    לגייס: "Recruit",
     "כיכר החטופים": "Advocacy",
   };
   const handleCheckboxChange = (selectedSkill) => {
-    let updatedSkills = Skills.includes(selectedSkill) 
+    let updatedSkills = Skills.includes(selectedSkill)
       ? Skills.filter((skill) => skill !== selectedSkill) // Remove skill
       : [...Skills, selectedSkill]; // Add skill
-  
+
     setSkills(updatedSkills); // Update skills state
     setIsButtonEnabled(updatedSkills.length > 0); // Enable/disable button
-  
+
     // Translate and log updated skills
-    const translatedSkills = updatedSkills.map((skill) => skillTranslations[skill] || skill);
+    const translatedSkills = updatedSkills.map(
+      (skill) => skillTranslations[skill] || skill
+    );
     console.log(translatedSkills);
   };
 
@@ -67,10 +69,10 @@ function Skills({ route }) {
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <View style={styles.buttonContainer}>
-          <LogoutButton
+          {/* <LogoutButton
             onPress={() => handleLogout(navigation)}
             title={"התנתק/י"}
-          />
+          /> */}
           <BackButton onPress={() => navigation.goBack()} title={"חזרה"} />
         </View>
         <Text style={styles.heading}>מה היית רוצה לעשות?</Text>

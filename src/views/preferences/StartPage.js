@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function StartPage({ route }) {
   const navigation = useNavigation();
@@ -10,10 +10,10 @@ function StartPage({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <LogoutButton
+        {/* <LogoutButton
           onPress={() => handleLogout(navigation)}
           title={"התנתק/י"}
-        />
+        /> */}
         <Text style={styles.heading}>מעולה!</Text>
         <Text style={styles.heading}>נמשיך להעדפות ההתנדבות שלך</Text>
       </View>

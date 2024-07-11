@@ -11,8 +11,8 @@ import {
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import DatePicker from "@react-native-community/datetimepicker";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function BirthDate({ route }) {
   const navigation = useNavigation();
@@ -99,10 +99,10 @@ function BirthDate({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <LogoutButton
+        {/* <LogoutButton
           onPress={() => handleLogout(navigation)}
           title={"התנתק/י"}
-        />
+        /> */}
         <Text style={styles.heading}>תאריך לידה</Text>
         <Text style={styles.dateText}>
           אנחנו שואלים מאחר ויש התנדבויות לנוער והתנדבויות למבוגרים.

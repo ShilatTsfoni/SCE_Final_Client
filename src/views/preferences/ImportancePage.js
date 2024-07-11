@@ -4,8 +4,8 @@ import { CheckBox } from "@rneui/themed";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import BackButton from "../../components/BackButton";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function ImportancePage({ route }) {
   const navigation = useNavigation();
@@ -59,10 +59,10 @@ function ImportancePage({ route }) {
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <View style={styles.buttonContainer}>
-          <LogoutButton
+          {/* <LogoutButton
             onPress={() => handleLogout(navigation)}
             title={"התנתק/י"}
-          />
+          /> */}
           <BackButton onPress={() => navigation.goBack()} title={"חזרה"} />
         </View>
         <Text style={styles.heading}>מה הכי חשוב לך?</Text>

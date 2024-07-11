@@ -3,8 +3,8 @@ import CustomButton from "../../components/CustomButton";
 import { useState } from "react";
 import { CheckBox } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function Gender({ route }) {
   const navigation = useNavigation();
@@ -20,10 +20,10 @@ function Gender({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <LogoutButton
+        {/* <LogoutButton
           onPress={() => handleLogout(navigation)}
           title={"התנתק/י"}
-        />
+        /> */}
         <Text style={styles.heading}>מגדר</Text>
         <Text style={styles.genderText}>
           אנחנו שואלים כי יש התנדבויות בהן זהו נושא רגיש.

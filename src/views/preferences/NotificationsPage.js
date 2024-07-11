@@ -2,8 +2,8 @@ import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function NotificationsPage({ route }) {
   const navigation = useNavigation();
@@ -27,10 +27,10 @@ function NotificationsPage({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <LogoutButton
+        {/* <LogoutButton
           onPress={() => handleLogout(navigation)}
           title={"התנתק/י"}
-        />
+        /> */}
         <Text style={styles.heading}>אישור התראות</Text>
         <Text style={styles.notificationText}>
           ככה נוכל להתריע לך לפני התנדבויות ושאר עדכונים חשובים (בלי לחפור,

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import LogoutButton from "../../components/LogoutButton";
-import { handleLogout } from "../SignUp/OTP";
+//import LogoutButton from "../../components/LogoutButton";
+//import { handleLogout } from "../SignUp/OTP";
 
 function SharingContacts({ route }) {
   const navigation = useNavigation();
@@ -28,10 +28,10 @@ function SharingContacts({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <LogoutButton
+        {/* <LogoutButton
           onPress={() => handleLogout(navigation)}
           title={"התנתק/י"}
-        />
+        /> */}
         <Text style={styles.heading}>שיתוף אנשי קשר</Text>
         <Text style={styles.shareText}>
           נראה לך פעילויות התנדבותיות שחברים וחברות שלך גם הולכים אליהן, שיהיה
