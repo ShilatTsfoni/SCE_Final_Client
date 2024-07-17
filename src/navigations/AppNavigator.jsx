@@ -3,6 +3,7 @@ import HomeNavigator from "./HomeNavigator";
 import SearchScreen from "../views/userViews/SearchScreen";
 import MyActivity from "../views/userViews/MyActivity.js";
 import ProfilePage from "../views/userViews/ProfilePage.js";
+import MessagesNavigator from "./MessagesNavigator.jsx";
 import { StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -56,6 +57,16 @@ const AppNavigator = () => {
           tabBarLabel: "פרופיל",
           tabBarIcon: ({ color, size }) => (
             <Icon name="user" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="MessagesNavigator"
+        component={MessagesNavigator}
+        options={{
+          tabBarLabel: "הודעות",
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="envelope" size={size} color={color} />
           ),
         }}
       />
