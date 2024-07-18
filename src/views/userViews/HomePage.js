@@ -36,15 +36,16 @@ function HomePage() {
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched data:", data);
+        console.log(typeof data);
         // Filter events where the current user's ID is in the volunteers array
-        const userEvents = data.filter((event) => {
+        const userEvents = data.results.filter((event) => {
           console.log("Event:", event);
           console.log("User ID:", user_id);
           console.log("Volunteers:", event.volunteers);
           const volunteerIds = event.volunteers.map((id) => String(id));
           return volunteerIds.includes(user_id);
         });
-        const userOffers = data.filter((event) => {
+        const userOffers = data.results.filter((event) => {
           console.log("Event:", event);
           console.log("User ID:", user_id);
           console.log("Volunteers:", event.volunteers);
