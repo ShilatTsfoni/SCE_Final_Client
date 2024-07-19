@@ -61,6 +61,7 @@ function HomePage() {
         console.error("Failed to fetch volunteer data");
       }
     } catch (error) {
+      console.log(data);
       console.error("Error fetching volunteer data:", error);
     }
   };
