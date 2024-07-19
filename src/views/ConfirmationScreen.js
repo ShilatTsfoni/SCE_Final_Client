@@ -7,6 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useState } from "react";
 import { TokenContext } from "../contexts/TokenContext";
+import { AuthContext } from "../contexts/AuthContext";
+
 // Import TokenContext if you plan to use it
 // import { TokenContext } from "../contexts/TokenContext";
 
@@ -14,6 +16,7 @@ function ConfirmationScreen({ route }) {
   const navigation = useNavigation();
   const [busy, setBusy] = useState(false);
   const [showError, setShowError] = useState(false);
+  const { setIsAuthenticated } = useContext(AuthContext);
   // If you plan to use the token from context, uncomment the next line
   // const { token, setToken } = useContext(TokenContext);
 
@@ -48,7 +51,7 @@ function ConfirmationScreen({ route }) {
       allow_notifications: false,
       finished_onboarding: true,
     };
-    console.log(data)
+    console.log(data);
     fetch(url, {
       method: "PATCH",
       headers: {
@@ -66,7 +69,13 @@ function ConfirmationScreen({ route }) {
       .then(async (responseData) => {
         console.log("Success:", responseData);
         setBusy(false);
-        navigation.navigate("HomePage");
+        //navigation.navigate("HomePage");
+        /*if (responseData.finished_onboarding === "true") {
+          console.log("74");
+          setIsAuthenticated(true);
+          navigation.navigate("HomePage");
+        }*/
+        setIsAuthenticated(true);
       })
       .catch((error) => {
         console.error("Error:", error);
