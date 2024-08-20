@@ -6,8 +6,9 @@ import { handleLogout } from "./SignUp/OTP";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useState } from "react";
-import { TokenContext } from "../contexts/TokenContext";
+import TokenContext from "../contexts/TokenContext";
 import { AuthContext } from "../contexts/AuthContext";
+import { UserContext } from "../contexts/userContext"; // Corrected import
 
 // Import TokenContext if you plan to use it
 // import { TokenContext } from "../contexts/TokenContext";
@@ -17,27 +18,15 @@ function ConfirmationScreen({ route }) {
   const [busy, setBusy] = useState(false);
   const [showError, setShowError] = useState(false);
   const { setIsAuthenticated } = useContext(AuthContext);
+  const {token} = useContext(TokenContext);
   // If you plan to use the token from context, uncomment the next line
   // const { token, setToken } = useContext(TokenContext);
+  const {userid} = useContext(UserContext);
 
   const handleSubmit = async () => {
     setBusy(true);
-    const token = await AsyncStorage.getItem("userToken"); // Proper declaration with const
     console.log(token);
-    if (!token) {
-      console.log("No token found");
-      setBusy(false); // Ensure you update state accordingly
-      // Optionally navigate to a login screen or show a message
-      return;
-    }
-    const user_id = await AsyncStorage.getItem("user_id");
-    if (!user_id) {
-      console.log("No id found");
-      setBusy(false); // Ensure you update state accordingly
-      // Optionally navigate to a login screen or show a message
-      return;
-    }
-    const url = "http://10.0.2.2:8000/api/account/update/" + user_id + "/";
+    const url = "http://10.0.2.2:8000/api/account/update/" + userid + "/";
     const data = {
       first_name: route.params.first_name,
       last_name: route.params.last_name,
@@ -56,7 +45,7 @@ function ConfirmationScreen({ route }) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Token ${token}`,
+        "Authorization":`Bearer ${token}`,
       },
       body: JSON.stringify(data),
     })

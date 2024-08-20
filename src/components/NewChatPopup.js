@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   View,
   Text,
@@ -8,16 +9,15 @@ import {
   StyleSheet,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import profile1 from "../../assets/images/profile1.jpg";
 
 const NewChatPopup = ({
   visible,
   onClose,
-  volunteers,
-  groups,
+  friends,
   onSelectChat,
 }) => {
   if (!visible) return null;
-
   return (
     <View style={styles.overlay}>
       <View style={styles.popup}>
@@ -27,10 +27,10 @@ const NewChatPopup = ({
             <Icon name="close" size={24} style={styles.closeIcon} />
           </TouchableOpacity>
         </View>
-        <Text style={styles.sectionTitle}>מתנדבים</Text>
+        <Text style={styles.sectionTitle}>חברים</Text>
         <FlatList
-          data={volunteers}
-          keyExtractor={(item) => item.id.toString()}
+          data={friends}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.chatItem}
@@ -39,25 +39,8 @@ const NewChatPopup = ({
                 onClose();
               }}
             >
-              <Image source={item.profile} style={styles.chatAvatar} />
-              <Text style={styles.chatName}>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
-        <Text style={styles.sectionTitle}>קבוצות</Text>
-        <FlatList
-          data={groups}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.chatItem}
-              onPress={() => {
-                onSelectChat({ ...item, type: "group" });
-                onClose();
-              }}
-            >
-              <Image source={item.profile} style={styles.chatAvatar} />
-              <Text style={styles.chatName}>{item.name}</Text>
+              <Image source={profile1} style={styles.chatAvatar} />
+              <Text style={styles.chatName}>{`${item.first_name} ${item.last_name}`}</Text>
             </TouchableOpacity>
           )}
         />

@@ -11,6 +11,7 @@ import {
 const windowWidth = Dimensions.get("window").width;
 
 function VolunteerOffer({
+  eventName ,
   organizationName,
   location,
   date,
@@ -38,7 +39,7 @@ function VolunteerOffer({
         numberOfLines={1}
         ellipsizeMode="tail"
       >
-        {organizationName}
+        {eventName} | {organizationName}
       </Text>
       <Text style={styles.offerText}>
         {location} | {time} | {date}

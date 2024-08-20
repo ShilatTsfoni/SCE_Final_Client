@@ -7,6 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 import BackButton from "../../components/BackButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../../contexts/AuthContext";
+import {UserContext } from "../../contexts/userContext";
+import { useFocusEffect } from '@react-navigation/native';
 
 export const handleLogout = async (setIsAuthenticated) => {
   try {
@@ -27,7 +29,7 @@ function OTP({ route }) {
   const { phone } = route.params;
   const navigation = useNavigation();
   const { setIsAuthenticated } = useContext(AuthContext);
-
+  const {setUserid,setFirst_name,setLast_name,setEmail,setCity,setVolunteer_frequency,setVolunteer_categories,setMost_important,setAllow_notifications,setFriends} = useContext(UserContext );
   const handleOtpChange = (otp) => {
     setOtp(otp);
     setIsValidOtp(otp.length === 6);
@@ -66,10 +68,48 @@ function OTP({ route }) {
           // Assuming your API returns a success field for valid responses
           await AsyncStorage.setItem("userToken", data.token); // Save the token to AsyncStorage
           await AsyncStorage.setItem("user_id", data.user_id);
+          setUserid(data.user_id);
           await AsyncStorage.setItem("onboarding", data.onboarding);
+          console.log(typeof data.onboarding)
+          if(data.onboarding != "False"){
+            console.log(data.token);
+            const response = await fetch("http://10.0.2.2:8000/api/account/users/" + data.user_id,{headers:{"Authorization":"Bearer " + data.token}}).then(
+              (response)=>{
+                  if(!response.ok){
+                  console.log(response);
+                  throw new Error("Network response was not ok");
+                }return response.json();
+              }
+            ).then(async (data) =>{
+
+              console.log('----------OTP-----------');
+              console.log(data);
+              console.log('----------OTP-----------');
+              await AsyncStorage.setItem("first_name", data.first_name); // Save the token to AsyncStorage
+              await AsyncStorage.setItem("last_name", data.last_name);
+              await AsyncStorage.setItem("email", data.email);
+              await AsyncStorage.setItem("city", data.city);
+              await AsyncStorage.setItem("volunteer_frequency", data.volunteer_frequency.toString());
+              await AsyncStorage.setItem("volunteer_categories", data.volunteer_categories.toString());
+              await AsyncStorage.setItem("allow_notifications", data.allow_notifications.toString());
+              await AsyncStorage.setItem("most_important", data.most_important);
+              await AsyncStorage.setItem("friends", data.friends.toString());
+              setFirst_name(data.first_name);
+              setLast_name(data.last_name);
+              setEmail(data.email);
+              setCity(data.city);
+              setVolunteer_frequency(data.volunteer_frequency.toString());
+              setVolunteer_categories(data.volunteer_categories.toString());
+              setMost_important(data.most_important);
+              setAllow_notifications(data.allow_notifications.toString());
+              setFriends(data.friends.toString());
+            }
+            );
+          }
           console.log("Token saved successfully");
           setIsValidOtp(true);
           setBusy(false);
+
           if (data.onboarding === "True") {
             setIsAuthenticated(true);
           } else {

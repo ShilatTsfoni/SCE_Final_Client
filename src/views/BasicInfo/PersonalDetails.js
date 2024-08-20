@@ -35,11 +35,11 @@ function PersonalDetails(route) {
       /^[\u0590-\u05FF]+$/.test(LastName) || /^[a-zA-Z]+$/.test(LastName);
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(Email);
 
-    if (isFirstNameValid && isLastNameValid && isEmailValid) {
+    //if (isFirstNameValid && isLastNameValid && isEmailValid) {
       setIsEnteredInfo(true);
-    } else {
-      setIsEnteredInfo(false);
-    }
+    //} else {
+     // setIsEnteredInfo(false);
+  //  }
   };
 
   const handleSubmit = () => {

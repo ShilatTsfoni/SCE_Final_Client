@@ -8,8 +8,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage"; // Ensure 
 import { AuthContext, AuthProvider } from "./src/contexts/AuthContext";
 import AuthNavigator from "./src/navigations/AuthNavigator";
 import AppNavigator from "./src/navigations/AppNavigator";
-import TokenProvider from "./src/contexts/TokenProvider"; // Import the TokenProvider
-
+import TokenContext, { tokenContext, TokenProvider } from "./src/contexts/TokenContext"; // Import the TokenProvider
+import { UserContext,UserProvider } from "./src/contexts/userContext";
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -22,6 +22,8 @@ export function AppContent() {
   //const [initialRouteName, setInitialRouteName] = useState("WelcomeScreen");
   const [isReady, setIsReady] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const { token, setToken } = useContext(TokenContext);
+  const {setUserid,setFirst_name,setLast_name,setEmail,setCity,setVolunteer_frequency,setVolunteer_categories,setMost_important,setAllow_notifications,setFriends} = useContext(UserContext );
 
   useEffect(() => {
     async function prepare() {
@@ -38,20 +40,34 @@ export function AppContent() {
         // await AsyncStorage.removeItem("onboarding");
 
         // Fetch the token from AsyncStorage
-        const token = await AsyncStorage.getItem("userToken");
+        const user_token = await AsyncStorage.getItem("userToken");
         const onbaording = await AsyncStorage.getItem("onboarding");
+        const userid = await AsyncStorage.getItem("user_id");
+        const first_name =await AsyncStorage.getItem("first_name"); // Save the token to AsyncStorage
+        const last_name =await AsyncStorage.getItem("last_name");
+        const email =await AsyncStorage.getItem("email");
+        const city =await AsyncStorage.getItem("city");
+        const volunteer_frequency =await AsyncStorage.getItem("volunteer_frequency");
+        const volunteer_categories =await AsyncStorage.getItem("volunteer_categories");
+        const allow_notifications =await AsyncStorage.getItem("allow_notifications");
+        const most_important =await AsyncStorage.getItem("most_important");
+        const friends =await AsyncStorage.getItem("friends");
         console.log("token", token);
         console.log("onbaording", onbaording);
-        // if (token && onbaording === "True") {
-        //   setInitialRouteName("HomePage"); // Adjust based on your app's logic
-        // } else if (token) {
-        //   setInitialRouteName("OnboardingStart");
-        // } else {
-        //   setInitialRouteName("WelcomeScreen");
-        // }
 
-        setIsAuthenticated(!!token); // Set authenticated state based on token presence
+        setIsAuthenticated(!!user_token); // Set authenticated state based on token presence
         setIsReady(true);
+        setToken(user_token)
+        setUserid(userid);
+        setFirst_name(first_name);
+        setLast_name(last_name);
+        setEmail(email);
+        setCity(city);
+        setVolunteer_frequency(volunteer_frequency);
+        setVolunteer_categories(volunteer_categories);
+        setMost_important(most_important);
+        setAllow_notifications(allow_notifications);
+        setFriends(friends);
         await SplashScreen.hideAsync();
       } catch (error) {
         console.warn("An error occurred during app preparation:", error);
@@ -82,7 +98,9 @@ export default function App() {
   return (
     <AuthProvider>
       <TokenProvider>
+        <UserProvider>
         <AppContent />
+        </UserProvider>
       </TokenProvider>
     </AuthProvider>
   );
