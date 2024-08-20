@@ -4,6 +4,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 function VolunteerCard({
+  eventName,
   organizationName,
   location,
   date,
@@ -39,10 +40,10 @@ function VolunteerCard({
     <View style={styles.container}>
       <Text
         style={styles.headingCardText}
-        numberOfLines={1}
+        numberOfLines={2}
         ellipsizeMode="tail"
       >
-        {organizationName}
+        {eventName} |{organizationName} | 
       </Text>
       <Text style={styles.cardText}>
         {location} | {time} | {date}

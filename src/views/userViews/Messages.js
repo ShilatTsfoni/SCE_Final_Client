@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useCallback,useContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import {
   View,
   Text,
@@ -14,109 +16,124 @@ import NewChatPopup from "../../components/NewChatPopup";
 import profile1 from "../../../assets/images/profile1.jpg";
 import profile2 from "../../../assets/images/profile2.jpg";
 import profile4 from "../../../assets/images/org1.png";
+import { UserContext } from "../../contexts/userContext"; // Corrected import
+import TokenContext from "../../contexts/TokenContext";
+import { useFocusEffect } from '@react-navigation/native';
+//---------------------------------------------------------------------------
 
 const Messages = () => {
   const navigation = useNavigation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentCategory, setCurrentCategory] = useState("private");
-  const [chats, setChats] = useState([
-    {
-      id: 1,
-      type: "private",
-      name: "יעל כהן",
-      lastMessage: "שלום",
-      profile: profile1,
-      time: "1 שעה",
-      status: "נקראה",
-      messages: [
-        { sender: "user", text: "שלום" },
-        { sender: "reply", text: "שלום, מה שלומך?" },
-      ],
-    },
-    {
-      id: 2,
-      type: "private",
-      name: "דני כהן",
-      lastMessage: "מה שלומך?",
-      profile: profile2,
-      time: "3 שעות",
-      status: "נשלחה",
-      messages: [
-        { sender: "user", text: "מה שלומך?" },
-        { sender: "reply", text: "אני בסדר, תודה" },
-      ],
-    },
-    {
-      id: 3,
-      type: "group",
-      name: "משמרת דוכן בוקר",
-      lastMessage: "ברוך הבא!",
-      profile: profile4,
-      time: "5 דקות",
-      status: "נקראה",
-      messages: [
-        { sender: "user", text: "ברוך הבא!" },
-        { sender: "reply", text: "תודה רבה:)" },
-      ],
-    },
-  ]);
+  const [chats, setChats] = useState([]);
+  const {userid,first_name,last_name} = useContext(UserContext);
+  const {token} = useContext(TokenContext);
+//---------------------------------------------------------------------------
 
-  const [volunteers, setVolunteers] = useState([
-    { id: 4, name: "רוני לוי", profile: profile1 },
-    { id: 5, name: "מיכל כהן", profile: profile2 },
-  ]);
+  const [friend_list, setFriend_list] = useState([]);
+//---------------------------------------------------------------------------
 
-  const [groups, setGroups] = useState([
-    { id: 6, name: "קבוצת ניהול", profile: profile4 },
-    { id: 7, name: "קבוצת מתנדבים", profile: profile4 },
-  ]);
+//---------------------------------------------------------------------------
 
   const [popupVisible, setPopupVisible] = useState(false);
-
-  const filteredChats = chats.filter((chat) =>
-    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
+  useFocusEffect(
+    useCallback(() => {
+      fetch_inbox();
+    }, [fetch_inbox])
   );
+//---------------------------------------------------------------------------
+
+  const fetch_inbox = useCallback(async () => {//
+    try {
+      const user_id = await AsyncStorage.getItem("user_id");
+      if (!user_id) {
+        console.log("No id found");//
+        return;
+      }
+      try {
+        const response = await fetch("http://10.0.2.2:8000/api/messages/inbox/",{headers:{"Authorization":`Bearer ${token}`}});//
+        if (response.ok) {
+          const data = await response.json();//
+          console.log(token);
+          console.log(data[0].related_chat.member_1)
+          setChats(data);
+        }
+      } catch (error) {
+        console.error("error retrieving next events data from server:", error);
+      }
+    } catch (error) {//
+      console.error("error retrieving next events data from server:", error);
+    }
+  });
+//---------------------------------------------------------------------------
 
   const handleSelectChat = (selectedChat) => {
-    const newChat = {
-      id: chats.length + 1,
-      type: selectedChat.type || "private",
-      name: selectedChat.name,
-      lastMessage: "",
-      profile: selectedChat.profile,
-      time: "",
-      status: "",
-      messages: [],
-    };
+    var newChat = null;
+    var sender_obj = {id:userid};
+    var recipient_obj = {id:selectedChat.id};
+    newChat = {
+        id:"-1",
+        sender: sender_obj,
+        recipient: recipient_obj,
+        //profile: profile1 ,//selectedChat.profile,
+        time: "",
+        //status: selectedChat.read,
+        //messages: [],
+      };
+    //console.log('==============HERE=============')
+    //console.log('hi')
+    //console.log('==============END=============')
+    console.log(newChat);
 
     setChats([...chats, newChat]);
     setPopupVisible(false);
     navigation.navigate("ChatWindow", {
-      chat: newChat,
-      onSendMessage: (message) => handleSendMessage(newChat.id, message),
+      chat: {newChat},
     });
   };
 
-  const handleSendMessage = (chatId, message) => {
-    setChats((prevChats) =>
-      prevChats.map((chat) =>
-        chat.id === chatId
-          ? {
-              ...chat,
-              messages: [...chat.messages, message],
-              lastMessage: message.text,
-              time: "עכשיו",
-              status: "נשלחה",
-            }
-          : chat
-      )
-    );
-  };
+//---------------------------------------------------------------------------
 
+  const get_chat_name = (item) =>{
+    if (item.recipient){
+      if (userid == item.recipient.id){
+        console.log(item.sender);
+        return item.sender.first_name + " " + item.sender.last_name;
+      }else{
+        return item.recipient.first_name + " " + item.recipient.last_name;//
+      }
+    }else{
+      return item.first_name + " " + item.last_name;
+    }
+  }
+//---------------------------------------------------------------------------
+
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(date);
+  };
+//
+const get_friends_info = async () =>{
+  const response = await fetch("http://10.0.2.2:8000/api/account/users/friends/",{headers:{"Authorization":`Bearer ${token}`}});//
+  if (response.ok) {
+    const data = await response.json();//
+    setFriend_list(data);
+    console.log(data);
+    }
+  setPopupVisible(true)
+}
+//---------------------------------------------------------------------------
+ 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => setPopupVisible(true)}>
+        <TouchableOpacity onPress={() => get_friends_info()}>
           <Icon name="plus" size={24} style={styles.newChatIcon} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>הודעות</Text>
@@ -165,42 +182,41 @@ const Messages = () => {
         </TouchableOpacity>
       </View>
       <FlatList
-        data={filteredChats.filter((chat) => chat.type === currentCategory)}
-        keyExtractor={(item) => item.id.toString()}
+        data={chats}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.chatItem}
             onPress={() =>
               navigation.navigate("ChatWindow", {
                 chat: item,
-                onSendMessage: (message) => handleSendMessage(item.id, message),
               })
             }
           >
             <View style={styles.chatDetails}>
-              <Text style={styles.chatName}>{item.name}</Text>
+              <Text style={styles.chatName}>{userid == item.related_chat.member_1.id ? item.related_chat.member_2.name : item.related_chat.member_1.name}</Text>
               <View style={styles.chatMessagePreview}>
-                <Text style={styles.chatLastMessage}>{item.lastMessage}</Text>
+                <Text style={styles.chatLastMessage}>{item.content ? item.content:""}</Text>
                 <View style={styles.chatMeta}>
-                  <Text style={styles.chatTime}>{item.time}</Text>
-                  <Text style={styles.chatStatus}>{item.status}</Text>
+                  <Text style={styles.chatTime}>{item.timestamp ? formatDate(item.timestamp) : ""}</Text>
+                  <Text style={styles.chatStatus}>{item.read ? item.read : ""}</Text>
                 </View>
               </View>
             </View>
-            <Image source={item.profile} style={styles.chatAvatar} />
+            <Image source={profile1} style={styles.chatAvatar} />
           </TouchableOpacity>
         )}
       />
       <NewChatPopup
         visible={popupVisible}
         onClose={() => setPopupVisible(false)}
-        volunteers={volunteers}
-        groups={groups}
+        friends={friend_list}
         onSelectChat={handleSelectChat}
       />
     </View>
   );
 };
+//---------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
   container: {
@@ -292,7 +308,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   chatTime: {
-    marginRight: 10,
+    marginRight: -10,
     color: "#999",
   },
   chatStatus: {
