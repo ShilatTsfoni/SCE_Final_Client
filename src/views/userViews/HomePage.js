@@ -140,7 +140,7 @@ function HomePage() {
       <VolunteerCard
         eventName = {item.name}
         organizationName={item.organization.name}
-        location={"גמליאל 5, תל אביב"}
+        location={item.location}
         date={formatDate(parsedStartDate)}
         time={parsedStartTime}
         id={item.id}
@@ -195,7 +195,7 @@ function HomePage() {
       <VolunteerOffer
         eventName = {item.name}
         organizationName={item.organization.name}
-        location={"גמליאל 5, תל אביב"}
+        location={item.location}
         date={formatDate(parsedStartDate)}
         time={parsedStartTime}//
         imageSource={imageExmp}
