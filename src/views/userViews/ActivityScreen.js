@@ -1,6 +1,4 @@
-
-
-import { useState,useContext } from "react";
+import { useState, useContext } from "react";
 
 import {
   Dimensions,
@@ -19,7 +17,6 @@ import CustomButton from "../../components/CustomButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TokenContext from "../../contexts/TokenContext";
 
-
 const screenWidth = Dimensions.get("window").width;
 const buttonWidth = (screenWidth - 16 * 3) / 2; // Subtracting padding and spacing between buttons
 
@@ -29,15 +26,15 @@ function ActivityScreen() {
   const { eventId, source, eventData } = route.params;
   const [userId, setUserId] = useState("");
   const [popupVisible, setPopupVisible] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
-  const {token} = useContext(TokenContext);
+  const [popupMessage, setPopupMessage] = useState("");
+  const { token } = useContext(TokenContext);
   const handleApprove = async () => {
     console.log("approved");
     navigation.goBack();
   };
   // Function to trigger the popup
   const triggerPopup = () => {
-    console.log("popup")
+    console.log("popup");
     setPopupVisible(true);
     setTimeout(() => {
       setPopupVisible(false);
@@ -64,7 +61,7 @@ function ActivityScreen() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization":`Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
           //body: JSON.stringify(data),
         }
@@ -101,7 +98,7 @@ function ActivityScreen() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization":`Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(data),
         }
@@ -119,7 +116,7 @@ function ActivityScreen() {
       console.error("Error applying to event:", error.message);
     }
   };
-  
+
   const images = [
     require("../../../assets/images/org1.png"),
     require("../../../assets/images/example.jpg"),
@@ -134,7 +131,7 @@ function ActivityScreen() {
 
   return (
     <View style={styles.container}>
-      <TopActions />
+      {/* <TopActions /> */}
       <ScrollView>
         <View style={styles.descriptionContainer}>
           <View style={styles.namelogoContainer}>
@@ -238,10 +235,10 @@ function ActivityScreen() {
         </View>
       </ScrollView>
       {popupVisible && (
-    <View style={styles.popupContainer}>
-      <Text style={styles.popupText}>{popupMessage}</Text>
-    </View>
-  )}
+        <View style={styles.popupContainer}>
+          <Text style={styles.popupText}>{popupMessage}</Text>
+        </View>
+      )}
       {source === "VolunteerCard" && (
         <View style={styles.buttonContainer}>
           <CustomButton
@@ -383,20 +380,20 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   popupContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 100, // Adjust as necessary
     left: 20,
     right: 20,
-    backgroundColor: '#000000', // Example color
+    backgroundColor: "#000000", // Example color
     padding: 16,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     zIndex: 1000, // Ensure it overlays other content
   },
   popupText: {
-    color: '#ffffff', // Example color
+    color: "#ffffff", // Example color
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 
