@@ -34,6 +34,7 @@ function HomePage() {
   
   const {userid,first_name,last_name,friends,most_important} = useContext(UserContext);
   const prefrences_dict = {'Friends':'התנדבויות עם החברים שלי','Distance':'התנדבויות קרובות אלי','Profession':'התנדבויות במקצוע שלי','Organization':'התנדבויות בארגונים שלי','New':'התנדבויות חדשות'};
+  
   //---------------------------------------------------------------------------
   useFocusEffect(
     useCallback(() => {
@@ -47,7 +48,7 @@ function HomePage() {
       try {
         const currentDate = getCurrentDate();
         console.log(userid);
-        const response = await fetch(`http://10.0.2.2:8000/api/events/?volunteers=${userid}&start_date_after=${currentDate}`,{headers:{"Authorization":`Bearer ${token}`}});
+        const response = await fetch(`http://10.0.2.2:8000/api/events/?volunteers=self&start_date_after=${currentDate}`,{headers:{"Authorization":`Bearer  ${token}`}});
         if (response.ok) {
           const data = await response.json();
           setNextVolunteeringData(data.results);
@@ -60,9 +61,10 @@ function HomePage() {
   const fetch_volunteer_offers =useCallback( async () => {
     try {
       if (most_important == 'Friends'){
-        setFilter_url(friends);
+        setFilter_url("friends");
       }
       const currentDate = getCurrentDate();
+      console.log("filters " + filter_url)
       const response = await fetch(`http://10.0.2.2:8000/api/events/?volunteers=${filter_url}&start_date_after=${currentDate}`,{headers:{"Authorization":`Bearer ${token}`}});
       if (response.ok) {//
         const data = await response.json();//
@@ -97,7 +99,8 @@ function HomePage() {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();//
-    return `${padZero(day)}.${padZero(month)}.${year}`;
+    //return `${padZero(day)}.${padZero(month)}.${year}`;
+    return `${year}.${padZero(month)}.${padZero(day)}`;
   };
   //---------------------------------------------------------------------------
   // Function to pad zero for single-digit numbers
@@ -135,6 +138,7 @@ function HomePage() {
         : "Invalid Date";
     return (
       <VolunteerCard
+        eventName = {item.name}
         organizationName={item.organization.name}
         location={"גמליאל 5, תל אביב"}
         date={formatDate(parsedStartDate)}
@@ -228,7 +232,7 @@ function HomePage() {
         {/* Render FlatList to display VolunteerCard components */}
         <FlatList
           data={nextVolunteeringData}
-          renderItem={renderVolunteerOfferItem}
+          renderItem={renderVolunteerCardItem}
           keyExtractor={(item) => item.id} // Provide a unique key for each item
           ItemSeparatorComponent={() => <View style={{ height: 16 }} />} // Add separator component
           contentContainerStyle={{ paddingBottom: 16 }} // Add paddingBottom to avoid cutoff

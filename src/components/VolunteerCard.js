@@ -17,7 +17,7 @@ function VolunteerCard({
 
   const parseDate = (providedDate) => {
     const [day, month, year] = providedDate.split(".");
-    return new Date(`${year}-${month}-${day}`);
+    return new Date(`${day}-${month}-${year}`);
   };
 
   const parsedDate = parseDate(date);
@@ -30,8 +30,8 @@ function VolunteerCard({
     providedDateObj.setHours(0, 0, 0, 0); // Set provided date to beginning of the day
     const timeDiff = providedDateObj.getTime() - currentDate.getTime(); // Difference in milliseconds
     const dayDiff = timeDiff / (1000 * 3600 * 24); // Difference in days
-    //console.log("Days Difference:", dayDiff);
-    return dayDiff >= 1 && dayDiff < 2; // Check if the difference is at least 1 day but less than 2 days
+    console.log("Days Difference:", dayDiff);
+    return dayDiff >= 1 && dayDiff <= 2; // Check if the difference is at least 1 day but less than 2 days
   };
 
   //console.log("Is 24 hours ahead:", is24HoursAhead(date));

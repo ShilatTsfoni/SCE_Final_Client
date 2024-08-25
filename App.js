@@ -59,15 +59,38 @@ export function AppContent() {
         setIsReady(true);
         setToken(user_token)
         setUserid(userid);
-        setFirst_name(first_name);
-        setLast_name(last_name);
-        setEmail(email);
-        setCity(city);
-        setVolunteer_frequency(volunteer_frequency);
-        setVolunteer_categories(volunteer_categories);
-        setMost_important(most_important);
-        setAllow_notifications(allow_notifications);
-        setFriends(friends);
+        const response = await fetch("http://10.0.2.2:8000/api/account/users/" + userid,{headers:{"Authorization":"Bearer " + user_token}}).then(
+          (response)=>{
+              if(!response.ok){
+              console.log(response);
+              throw new Error("Network response was not ok");
+            }return response.json();
+          }
+        ).then(async (data) =>{
+
+          console.log('----------OTP-----------');
+          console.log(data);
+          console.log('----------OTP-----------');
+          await AsyncStorage.setItem("first_name", data.first_name); // Save the token to AsyncStorage
+          await AsyncStorage.setItem("last_name", data.last_name);
+          await AsyncStorage.setItem("email", data.email);
+          await AsyncStorage.setItem("city", data.city);
+          await AsyncStorage.setItem("volunteer_frequency", data.volunteer_frequency.toString());
+          await AsyncStorage.setItem("volunteer_categories", data.volunteer_categories.toString());
+          await AsyncStorage.setItem("allow_notifications", data.allow_notifications.toString());
+          await AsyncStorage.setItem("most_important", data.most_important);
+          await AsyncStorage.setItem("friends", data.friends.toString());
+          setFirst_name(data.first_name);
+          setLast_name(data.last_name);
+          setEmail(data.email);
+          setCity(data.city);
+          setVolunteer_frequency(data.volunteer_frequency.toString());
+          setVolunteer_categories(data.volunteer_categories.toString());
+          setMost_important(data.most_important);
+          setAllow_notifications(data.allow_notifications.toString());
+          setFriends(data.friends.toString());
+        }
+        );
         await SplashScreen.hideAsync();
       } catch (error) {
         console.warn("An error occurred during app preparation:", error);

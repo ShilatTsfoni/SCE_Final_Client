@@ -55,7 +55,7 @@ const Messages = () => {
         if (response.ok) {
           const data = await response.json();//
           console.log(token);
-          console.log(data[0].related_chat.member_1)
+          console.log(data[0])
           setChats(data);
         }
       } catch (error) {
@@ -67,30 +67,36 @@ const Messages = () => {
   });
 //---------------------------------------------------------------------------
 
-  const handleSelectChat = (selectedChat) => {
+  const handleSelectChat =  useCallback(async (selectedChat) => {
     var newChat = null;
     var sender_obj = {id:userid};
     var recipient_obj = {id:selectedChat.id};
-    newChat = {
-        id:"-1",
-        sender: sender_obj,
-        recipient: recipient_obj,
-        //profile: profile1 ,//selectedChat.profile,
-        time: "",
-        //status: selectedChat.read,
-        //messages: [],
-      };
-    //console.log('==============HERE=============')
-    //console.log('hi')
-    //console.log('==============END=============')
-    console.log(newChat);
+    const post_body = { member_1 : {id:sender_obj.id},
+                  member_2 : {id:recipient_obj.id}}
+    const response = await fetch(
+      "http://10.0.2.2:8000/api/chats/",
+      {
+        body: JSON.stringify(post_body),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":`Bearer ${token}`
+        },
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();//
+      console.log(data);
+      const dat = {related_chat:data,sender:{id:data.member_1.id}}
+      console.log(dat)
+      setChats([...chats, dat]);
+      setPopupVisible(false);
+      navigation.navigate("ChatWindow", {
+        chat: dat,
+      });
+    }
 
-    setChats([...chats, newChat]);
-    setPopupVisible(false);
-    navigation.navigate("ChatWindow", {
-      chat: {newChat},
-    });
-  };
+  });
 
 //---------------------------------------------------------------------------
 

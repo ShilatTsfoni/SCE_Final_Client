@@ -1,3 +1,7 @@
+
+
+import { useState,useContext } from "react";
+
 import {
   Dimensions,
   Image,
@@ -8,12 +12,13 @@ import {
 } from "react-native";
 import TopActions from "../../components/TopActions";
 import ImagesSwipeSlide from "../../components/ImagesSwipeSlide";
-import { useState } from "react";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import LinkButton from "../../components/LinkButton";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CustomButton from "../../components/CustomButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import TokenContext from "../../contexts/TokenContext";
+
 
 const screenWidth = Dimensions.get("window").width;
 const buttonWidth = (screenWidth - 16 * 3) / 2; // Subtracting padding and spacing between buttons
@@ -25,6 +30,7 @@ function ActivityScreen() {
   const [userId, setUserId] = useState("");
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
+  const {token} = useContext(TokenContext);
   const handleApprove = async () => {
     console.log("approved");
     navigation.goBack();
@@ -47,19 +53,20 @@ function ActivityScreen() {
       setUserId(user_id);
       console.log("user id:", user_id);
       console.log("event id:", eventId);
-      const data = {
+      /*const data = {
         user: user_id,
         event: eventId,
         stsus: null,
-      };
+      };*/
       const response = await fetch(
         "http://10.0.2.2:8000/api/events/" + eventId + "/cancel/",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization":`Bearer ${token}`
           },
-          body: JSON.stringify(data),
+          //body: JSON.stringify(data),
         }
       );
       if (response.ok) {
@@ -94,6 +101,7 @@ function ActivityScreen() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization":`Bearer ${token}`
           },
           body: JSON.stringify(data),
         }

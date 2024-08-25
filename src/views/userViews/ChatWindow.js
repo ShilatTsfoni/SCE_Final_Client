@@ -65,7 +65,7 @@ const ChatWindow = ({ route, navigation }) => {
       related_chat:chat.related_chat.id,
       content: newMessage,
     };
-
+    console.log(message)
     // Send message via WebSocket
     ws.current.send(JSON.stringify({ message }));
     // Add the message to the local state
@@ -73,7 +73,7 @@ const ChatWindow = ({ route, navigation }) => {
     setNewMessage("");
   };
 //---------------------------------------------------------------------------
-
+//hello
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -87,12 +87,13 @@ const ChatWindow = ({ route, navigation }) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => {
           const isUserMessage = item.sender.id == userid ? true:false; // Ensure this comparison is correct
+          console.log(item)
           return (
             <View
-              style={isUserMessage ? styles.userMessage : styles.replyMessage}
+              style={isUserMessage == true ? styles.userMessage : styles.replyMessage}
             >
               <Text
-                style={isUserMessage ? styles.userMessageText : styles.replyMessageText}
+                style={isUserMessage == false ? styles.userMessageText : styles.replyMessageText}
               >
                 {item.content}
               </Text>
