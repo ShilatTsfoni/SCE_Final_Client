@@ -32,7 +32,7 @@ export function AppContent () {
   const [isReady, setIsReady] = useState(false)
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext)
   const { token, setToken } = useContext(TokenContext)
-  const {hasNewMessage, setHasNewMessage} = useContext(NotificationContext);
+  const {hasNewMessage, setHasNewMessage,hasnewfr,setHasNewFR} = useContext(NotificationContext);
   const {
     setUserid,
     setFirst_name,
@@ -137,7 +137,8 @@ export function AppContent () {
               setPhone(data.phone)
               setBirthday(data.birth_day)
               webSocketManager.connect(userid, user_token,{
-                setHasNewMessage: setHasNewMessage});
+                setHasNewMessage,
+                setHasNewFR});
               
             })
         }

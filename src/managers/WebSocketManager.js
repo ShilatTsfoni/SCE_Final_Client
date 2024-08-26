@@ -42,10 +42,13 @@ class WebSocketManager {
 
     // Handle incoming notifications (you can update any context here)
     handleNotification(data) {
-        console.log(this.contextUpdaters.setHasNewMessage)
         if (data.notification) {
             if(data.notification.type == "new_message"){
                 this.contextUpdaters.setHasNewMessage(true);
+            }
+            else if (data.notification.type == "friend_request"){
+                console.log("fr")
+                this.contextUpdaters.setHasNewFR(true);
             }
             console.log('Handling notification:', data.notification);
         }

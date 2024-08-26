@@ -14,7 +14,7 @@ import { NotificationContext } from "../contexts/NotificationContext"; // Import
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
-  const { hasNewMessage } = useContext(NotificationContext); // Access notification state
+  const { hasNewMessage,hasnewfr } = useContext(NotificationContext); // Access notification state
   return (
     <Tab.Navigator
       screenOptions={{
@@ -59,9 +59,32 @@ const AppNavigator = () => {
         name="NotificationsScreen"
         component={NotificationsScreen}
         options={{
-          tabBarLabel: "תהראות",
+          tabBarLabel: "התראות",
           tabBarIcon: ({ color, size }) => (
-            <Icon name="bell" size={size} color={color} />
+            <View>
+              <Icon name="bell" size={size} color={color} />
+              {hasnewfr && (
+                <View
+                  style={{
+                    position: "absolute",
+                    right: -6,
+                    top: -3,
+                    backgroundColor: "red",
+                    borderRadius: 6,
+                    width: 12,
+                    height: 12,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{ color: "white", fontSize: 8, fontWeight: "bold" }}
+                  >
+                    !
+                  </Text>
+                </View>
+              )}
+            </View>
           ),
         }}
       />
