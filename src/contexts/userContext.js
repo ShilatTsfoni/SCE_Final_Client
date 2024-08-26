@@ -16,6 +16,7 @@ export const UserProvider = ({ children }) => {
   const [friends,setFriends]= useState([]);;
   const [phone,setPhone]= useState([]);;
   const [birthday,setBirthday] = useState([]);;
+  const [onboarding,setOnboarding] = useState([]);;
   return (
     <UserContext.Provider value={{
                                     userid,setUserid,
@@ -28,7 +29,8 @@ export const UserProvider = ({ children }) => {
                                     most_important,setMost_important,
                                     allow_notifications,setAllow_notifications,
                                     friends,setFriends,phone,setPhone,
-                                    birthday,setBirthday}}>
+                                    birthday,setBirthday,
+                                    onboarding,setOnboarding}}>
 
       {children}
     </UserContext.Provider>

@@ -32,7 +32,7 @@ function OTP({ route }) {
   const { phone } = route.params;
   const navigation = useNavigation();
   const { setIsAuthenticated } = useContext(AuthContext);
-  const {setUserid,setFirst_name,setLast_name,setEmail,setCity,setVolunteer_frequency,setVolunteer_categories,setMost_important,setAllow_notifications,setFriends,setPhone,setBirthday} = useContext(UserContext );
+  const {setUserid,setFirst_name,setLast_name,setEmail,setCity,setVolunteer_frequency,setVolunteer_categories,setMost_important,setAllow_notifications,setFriends,setPhone,setBirthday,setOnboarding} = useContext(UserContext );
   const { token, setToken } = useContext(TokenContext)
   const handleOtpChange = (otp) => {
     setOtp(otp);
@@ -70,11 +70,9 @@ function OTP({ route }) {
         console.log(data);
         if (data.token && data.user_id) {
           // Assuming your API returns a success field for valid responses
-          await AsyncStorage.setItem("userToken", data.token); // Save the token to AsyncStorage
-          await AsyncStorage.setItem("user_id", data.user_id);
+          setToken(data.token);
           setUserid(data.user_id);
-          await AsyncStorage.setItem("onboarding", data.onboarding);
-          console.log(typeof data.onboarding)
+          setOnboarding(data.onboarding);
           if(data.onboarding != "False"){
             console.log(data.token);
             const response = await fetch("http://10.0.2.2:8000/api/account/users/" + data.user_id,{headers:{"Authorization":"Bearer " + data.token}}).then(
@@ -111,7 +109,6 @@ function OTP({ route }) {
               setFriends(data.friends.toString());
               setPhone(data.phone)
               setBirthday(data.birth_day)
-              setToken(data.token)
             }
             );
           }

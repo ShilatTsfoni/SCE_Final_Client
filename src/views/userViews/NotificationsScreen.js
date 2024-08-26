@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useCallback,useContext } from "react";
+import { useFocusEffect } from '@react-navigation/native';
+import { UserContext } from "../../contexts/userContext"; // Corrected import
+import TokenContext from "../../contexts/TokenContext";
+import { NotificationContext } from '../../contexts/NotificationContext';
+
 import {
   View,
   Text,
@@ -10,6 +15,11 @@ import {
 } from "react-native";
 
 const NotificationsScreen = () => {
+  const {userid,first_name,last_name} = useContext(UserContext);
+  const {token} = useContext(TokenContext);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const { setHasNewFR } = useContext(NotificationContext);
   const [notifications, setNotifications] = useState([
     {
       id: "1",
@@ -33,33 +43,79 @@ const NotificationsScreen = () => {
       time: "לפני 15 דקות",
     },
   ]);
-
+  useFocusEffect(
+    useCallback(() => {
+      fetch_friend_requests()
+      setHasNewFR(false)
+    }, [setNotifications])
+  );
+    // Function to trigger the popup
+  const triggerPopup = () => {
+      console.log("popup");
+      setPopupVisible(true);
+      setTimeout(() => {
+        setPopupVisible(false);
+      }, 3000); // Disappear after 3 seconds
+    };
+  const fetch_friend_requests = useCallback(async () => {//
+    try {
+      if (!userid) {
+        console.log("No id found");//
+        return;
+      }
+      try {
+        const response = await fetch("http://10.0.2.2:8000/api/account/friendrequests/",{headers:{"Authorization":`Bearer ${token}`}});//
+        if (response.ok) {
+          const data = await response.json();//
+          console.log(data);
+          setNotifications(data);
+        }
+      } catch (error) {
+        console.error("error retrieving friendrequests data from server:", error);
+      }
+    } catch (error) {//
+      console.error("error retrieving friendrequests data from server:", error);
+    }
+  });
+  const handleFriendRequest = async (action, id) => {
+    try {
+      const response = await fetch(`http://10.0.2.2:8000/api/account/friendrequests/${id}/${action}/`,{method: 'POST',headers:{"Authorization":`Bearer ${token}`}});//
+      if (response.ok) {
+        const data = await response.json();//
+        setPopupMessage(data.message);
+        triggerPopup();
+        setNotifications(notifications.filter((item) => item.id !== id));
+      }
+    } catch (error) {
+      console.error("error retrieving friendrequests data from server:", error);
+    }
+  };
+  
   const renderNotificationItem = ({ item }) => {
     if (item.type === "message") {
       return (
         <View style={styles.notificationContainer}>
           <Text style={styles.notificationText}>
-            {item.sender} שלח/ה לך הודעה חדשה.
+            {item.sender.first_name +" "+ item.sender.last_name} שלח/ה לך הודעה חדשה.
           </Text>
           <Text style={styles.notificationTime}>{item.time}</Text>
         </View>
       );
-    } else if (item.type === "friend_request") {
+    } else if (true) {
       return (
         <View style={styles.notificationContainer}>
           <Text style={styles.notificationText}>
-            {item.sender} שלח/ה לך בקשת חברות.
+            {item.sender.first_name +" "+ item.sender.last_name} שלח/ה לך בקשת חברות.
           </Text>
-          <Text style={styles.notificationTime}>{item.time}</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              onPress={() => handleFriendRequest("מחיקה", item.id)}
+              onPress={() => handleFriendRequest("reject", item.id)}
               style={styles.declineButton}
             >
               <Text style={styles.declineButtonText}>מחיקה</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => handleFriendRequest("אשר/י", item.id)}
+              onPress={() => handleFriendRequest("accept", item.id)}
               style={styles.acceptButton}
             >
               <Text style={styles.acceptButtonText}>אשר/י</Text>
@@ -79,12 +135,7 @@ const NotificationsScreen = () => {
     }
   };
 
-  const handleFriendRequest = (action, id) => {
-    // need to add handling of approval or rejection situations
-    console.log(`${action} friend request with ID: ${id}`);
-    // Remove the alert from the list after action
-    setNotifications(notifications.filter((item) => item.id !== id));
-  };
+
 
   return (
     <View style={styles.container}>

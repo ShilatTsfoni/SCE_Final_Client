@@ -31,6 +31,7 @@ function ImportancePage({ route }) {
   };
 
   const handleContinue = () => {
+    console.log(route.params)
     if (importance) {
       const {
         first_name,
