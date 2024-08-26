@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeNavigator from "./HomeNavigator";
@@ -6,14 +6,15 @@ import SearchScreen from "../views/userViews/SearchScreen";
 import MyActivity from "../views/userViews/MyActivity.js";
 import ProfilePage from "../views/userViews/ProfilePage.js";
 import MessagesNavigator from "./MessagesNavigator.jsx";
-import { StyleSheet ,View,Text} from "react-native";
+import NotificationsScreen from "../views/userViews/NotificationsScreen.js";
+import { StyleSheet, View, Text } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { NotificationContext } from '../contexts/NotificationContext';  // Import the NotificationContext
+import { NotificationContext } from "../contexts/NotificationContext"; // Import the NotificationContext
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
-  const { hasNewMessage } = useContext(NotificationContext);  // Access notification state
+  const { hasNewMessage } = useContext(NotificationContext); // Access notification state
   return (
     <Tab.Navigator
       screenOptions={{
@@ -55,6 +56,16 @@ const AppNavigator = () => {
         }}
       />
       <Tab.Screen
+        name="NotificationsScreen"
+        component={NotificationsScreen}
+        options={{
+          tabBarLabel: "תהראות",
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="bell" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="ProfilePage"
         component={ProfilePage}
         options={{
@@ -75,18 +86,20 @@ const AppNavigator = () => {
               {hasNewMessage && (
                 <View
                   style={{
-                    position: 'absolute',
+                    position: "absolute",
                     right: -6,
                     top: -3,
-                    backgroundColor: 'red',
+                    backgroundColor: "red",
                     borderRadius: 6,
                     width: 12,
                     height: 12,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: 8, fontWeight: 'bold' }}>
+                  <Text
+                    style={{ color: "white", fontSize: 8, fontWeight: "bold" }}
+                  >
                     !
                   </Text>
                 </View>
