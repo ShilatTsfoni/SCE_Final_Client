@@ -45,7 +45,8 @@ export function AppContent () {
     setAllow_notifications,
     setFriends,
     setPhone,
-    setBirthday
+    setBirthday,
+    setOnboarding
   } = useContext(UserContext)
 
   useEffect(() => {
@@ -59,32 +60,8 @@ export function AppContent () {
           Assistant: require('./assets/fonts/assistant_variablefont_wght.ttf'),
           Inter: require('./assets/fonts/Inter-VariableFont_slnt,wght.ttf')
         })
-
-        // await AsyncStorage.removeItem("userToken");
-        // await AsyncStorage.removeItem("onboarding");
-
-        // Fetch the token from AsyncStorage
         const user_token = await AsyncStorage.getItem('userToken')
-        const onbaording = await AsyncStorage.getItem('onboarding')
         const userid = await AsyncStorage.getItem('user_id')
-        const first_name = await AsyncStorage.getItem('first_name') // Save the token to AsyncStorage
-        const last_name = await AsyncStorage.getItem('last_name')
-        const email = await AsyncStorage.getItem('email')
-        const city = await AsyncStorage.getItem('city')
-        const volunteer_frequency = await AsyncStorage.getItem(
-          'volunteer_frequency'
-        )
-        const volunteer_categories = await AsyncStorage.getItem(
-          'volunteer_categories'
-        )
-        const allow_notifications = await AsyncStorage.getItem(
-          'allow_notifications'
-        )
-        const most_important = await AsyncStorage.getItem('most_important')
-        const friends = await AsyncStorage.getItem('friends')
-        console.log('token', token)
-        console.log('onbaording', onbaording)
-
         setIsAuthenticated(!!user_token) // Set authenticated state based on token presence
         setIsReady(true)
         setToken(user_token)
@@ -102,40 +79,19 @@ export function AppContent () {
               return response.json()
             })
             .then(async data => {
-              console.log('----------OTP-----------')
               console.log(data)
-              console.log('----------OTP-----------')
-              await AsyncStorage.setItem('first_name', data.first_name) // Save the token to AsyncStorage
-              await AsyncStorage.setItem('last_name', data.last_name)
-              await AsyncStorage.setItem('email', data.email)
-              await AsyncStorage.setItem('city', data.city)
-              await AsyncStorage.setItem(
-                'volunteer_frequency',
-                data.volunteer_frequency.toString()
-              )
-              await AsyncStorage.setItem(
-                'volunteer_categories',
-                data.volunteer_categories.toString()
-              )
-              await AsyncStorage.setItem(
-                'allow_notifications',
-                data.allow_notifications.toString()
-              )
-              await AsyncStorage.setItem('most_important', data.most_important)
-              await AsyncStorage.setItem('friends', data.friends.toString())
-              await AsyncStorage.setItem('phone', data.phone)
-              await AsyncStorage.setItem('birthday', data.birth_day)
               setFirst_name(data.first_name)
               setLast_name(data.last_name)
               setEmail(data.email)
               setCity(data.city)
-              setVolunteer_frequency(data.volunteer_frequency.toString())
-              setVolunteer_categories(data.volunteer_categories.toString())
+              //setVolunteer_frequency(data.volunteer_frequency.toString())
+              //setVolunteer_categories(data.volunteer_categories.toString())
               setMost_important(data.most_important)
               setAllow_notifications(data.allow_notifications.toString())
               setFriends(data.friends.toString())
               setPhone(data.phone)
               setBirthday(data.birth_day)
+              setOnboarding(data.setOnboarding)
               webSocketManager.connect(userid, user_token,{
                 setHasNewMessage,
                 setHasNewFR});
