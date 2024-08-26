@@ -28,10 +28,7 @@ function ActivityScreen() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
   const { token } = useContext(TokenContext);
-  const handleApprove = async () => {
-    console.log("approved");
-    navigation.goBack();
-  };
+
   // Function to trigger the popup
   const triggerPopup = () => {
     console.log("popup");
@@ -76,6 +73,42 @@ function ActivityScreen() {
       console.error("Error canceling the event:", error.message);
     }
   };
+  const handleConfirm = async () => {
+    try {
+      const user_id = await AsyncStorage.getItem("user_id");
+      if (!user_id) {
+        console.log("No id found");
+        return;
+      }
+      setUserId(user_id);
+      console.log("user id:", user_id);
+      console.log("event id:", eventId);
+      /*const data = {
+        user: user_id,
+        event: eventId,
+        stsus: null,
+      };*/
+      const response = await fetch(
+        "http://10.0.2.2:8000/api/events/" + eventId + "/confirm/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          //body: JSON.stringify(data),
+        }
+      );
+      if (response.ok) {
+        console.log("Succesfully Confirmed");
+        navigation.navigate("HomePage");
+      } else {
+        throw new Error("Failed to Confirm the event");
+      }
+    } catch (error) {
+      console.error("Error Confirming the event:", error.message);
+    }
+  };
 
   const handleSignNow = async () => {
     try {
@@ -90,7 +123,6 @@ function ActivityScreen() {
       const data = {
         user: user_id,
         event: eventId,
-        stsus: null,
       };
       const response = await fetch(
         "http://10.0.2.2:8000/api/events/" + eventId + "/apply/",
@@ -251,7 +283,7 @@ function ActivityScreen() {
           />
           <CustomButton
             title="אגיע לפעילות"
-            onPress={handleApprove}
+            onPress={handleConfirm}
             buttonColor={"#1355CB"}
             textColor={"#FFFFFF"}
             borderColor={"#1355CB"}
