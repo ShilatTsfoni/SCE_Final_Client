@@ -19,6 +19,8 @@ import profile4 from "../../../assets/images/org1.png";
 import { UserContext } from "../../contexts/userContext"; // Corrected import
 import TokenContext from "../../contexts/TokenContext";
 import { useFocusEffect } from '@react-navigation/native';
+import { NotificationContext } from '../../contexts/NotificationContext';
+
 //---------------------------------------------------------------------------
 
 const Messages = () => {
@@ -28,6 +30,7 @@ const Messages = () => {
   const [chats, setChats] = useState([]);
   const {userid,first_name,last_name} = useContext(UserContext);
   const {token} = useContext(TokenContext);
+  const { setHasNewMessage } = useContext(NotificationContext);
 //---------------------------------------------------------------------------
 
   const [friend_list, setFriend_list] = useState([]);
@@ -38,8 +41,9 @@ const Messages = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   useFocusEffect(
     useCallback(() => {
+      setHasNewMessage(false);
       fetch_inbox();
-    }, [fetch_inbox])
+    }, [])
   );
 //---------------------------------------------------------------------------
 

@@ -21,13 +21,15 @@ const staticPeople = [
 
 const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTab, setSelectedTab] = useState("shifts");
+  const [selectedTab, setSelectedTab] = useState("events");
   const [selectedItem, setSelectedItem] = useState(null);
-  const [shiftsData, setShiftsData] = useState([]);
+  const [eventsData, setEventsData] = useState([]);
+  const [usersData,setUsersData] = useState([]);
   const [organizations, setOrganizations] = useState({});
   const { token } = useContext(TokenContext);
   const { userid } = useContext(UserContext);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
   const navigation = useNavigation();
 
@@ -38,70 +40,57 @@ const SearchScreen = () => {
       setSelectedItem(null);
       setSelectedVolunteer(null);
       setIsRegistered(false);
+      setIsFriend(false)
     }, [])
   );
 
   useEffect(() => {
-    const fetchShifts = async () => {
+    const fetchEvents= async () => {
       try {
-        const response = await fetch("http://10.0.2.2:8000/api/shifts/", {
+        const response = await fetch(`http://10.0.2.2:8000/api/events/?search=${searchQuery}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("Fetched Shifts:", data.results);
-          setShiftsData(data.results);
+          console.log("Fetched Events:", data.results);
+          setEventsData(data.results);
 
-          // Load organization names
           const uniqueOrganizationIds = [
-            ...new Set(data.results.map((shift) => shift.organization)),
+            ...new Set(data.results.map((event) => event.id)),
           ];
-
-          uniqueOrganizationIds.forEach(async (organizationId) => {
-            const organizationName = await fetchOrganizationName(
-              organizationId
-            );
-            setOrganizations((prev) => ({
-              ...prev,
-              [organizationId]: organizationName,
-            }));
-          });
         } else {
-          console.error("Failed to fetch shifts data");
+          console.error("Failed to fetch Events data");
         }
       } catch (error) {
-        console.error("Error fetching shifts data:", error);
+        console.error("Error fetching Events data:", error);
       }
     };
-
-    fetchShifts();
-  }, [token]);
-
-  const fetchOrganizationName = async (organizationId) => {
-    try {
-      const response = await fetch(
-        `http://10.0.2.2:8000/api/organizations/${organizationId}/`,
-        {
+    const fetchUsers= async () => {
+      try {
+        const response = await fetch(`http://10.0.2.2:8000/api/account/users/?search=${searchQuery}`, {
           headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Fetched users:", data.results);
+          setUsersData(data.results);
+
+          const uniqueUserIds = [
+            ...new Set(data.results.map((user) => user.id)),
+          ];
+        } else {
+          console.error("Failed to fetch users data");
         }
-      );
-      if (response.ok) {
-        const organizationData = await response.json();
-        return organizationData.name;
-      } else {
-        console.error(
-          `Failed to fetch organization data for ID: ${organizationId}`
-        );
-        return "לא זמין";
+      } catch (error) {
+        console.error("Error fetching users data:", error);
       }
-    } catch (error) {
-      console.error(`Error fetching organization data:`, error);
-      return "לא זמין";
-    }
-  };
+    };
+    fetchEvents();
+    fetchUsers();
+  }, [searchQuery]);
 
   const handleItemPress = (item) => {
-    if (selectedTab === "shifts") {
+    if (selectedTab === "events") {
       handleVolunteerPress(item);
     } else if (selectedTab === "people") {
       setSelectedItem(item); // Set the selected person to trigger the modal
@@ -117,10 +106,10 @@ const SearchScreen = () => {
     setSelectedVolunteer(volunteer);
   };
 
-  const checkIfUserRegistered = (shift) => {
-    console.log("Check If User Registered - Shift Data:", shift);
-    if (shift.volunteers && Array.isArray(shift.volunteers)) {
-      const isUserRegistered = shift.volunteers.some(
+  const checkIfUserRegistered = (event) => {
+    console.log("Check If User Registered - Events Data:", event);
+    if (event.volunteers && Array.isArray(event.volunteers)) {
+      const isUserRegistered = event.volunteers.some(
         (volunteer) => Number(volunteer) === Number(userid)
       );
       console.log("Check If User Registered:", isUserRegistered);
@@ -150,14 +139,14 @@ const SearchScreen = () => {
       return null;
     }
 
-    if (selectedTab === "shifts") {
-      if (!Array.isArray(shiftsData) || shiftsData.length === 0) {
+    if (selectedTab === "events") {
+      if (!Array.isArray(eventsData) || eventsData.length === 0) {
         return <Text>לא נמצאו משמרות.</Text>;
       }
 
       return (
         <FlatList
-          data={shiftsData.filter((shift) => shift.name.includes(searchQuery))}
+          data={eventsData}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => handleVolunteerPress(item)}
@@ -165,7 +154,7 @@ const SearchScreen = () => {
             >
               <Text style={styles.resultText}>{item.name}</Text>
               <Text style={styles.resultText}>
-                ארגון: {organizations[item.organization] || "טוען..."}
+                ארגון: {item.organization.name|| "טוען..."}
               </Text>
             </TouchableOpacity>
           )}
@@ -176,16 +165,14 @@ const SearchScreen = () => {
     } else if (selectedTab === "people") {
       return (
         <FlatList
-          data={staticPeople.filter((person) =>
-            `${person.firstName} ${person.lastName}`.includes(searchQuery)
-          )}
+          data={usersData}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => handleItemPress(item)}
               style={styles.resultItem}
             >
               <Text style={styles.resultText}>
-                {item.firstName} {item.lastName}
+                {item.first_name} {item.last_name}
               </Text>
             </TouchableOpacity>
           )}
@@ -216,14 +203,14 @@ const SearchScreen = () => {
           <TouchableOpacity
             style={[
               styles.tabButton,
-              selectedTab === "shifts" && styles.activeTab,
+              selectedTab === "events" && styles.activeTab,
             ]}
-            onPress={() => setSelectedTab("shifts")}
+            onPress={() => setSelectedTab("events")}
           >
             <Text
               style={[
                 styles.tabText,
-                selectedTab === "shifts" && styles.activeTabText,
+                selectedTab === "events" && styles.activeTabText,
               ]}
             >
               משמרות
@@ -266,7 +253,7 @@ const SearchScreen = () => {
                 </Text>
                 <Text style={styles.modalText}>
                   ארגון:{" "}
-                  {organizations[selectedVolunteer.organization] || "לא זמין"}
+                  {selectedVolunteer.organization.name || "לא זמין"}
                 </Text>
                 <Text style={styles.modalText}>
                   תיאור: {selectedVolunteer.description || "לא זמין"}
@@ -296,12 +283,12 @@ const SearchScreen = () => {
                           id: selectedVolunteer.id,
                           name: selectedVolunteer.name,
                           organization:
-                            organizations[selectedVolunteer.organization],
+                            selectedVolunteer.organization.name,
                           description: selectedVolunteer.description,
                           startDate: selectedVolunteer.start_date,
                           duration: selectedVolunteer.duration,
                           volunteers: selectedVolunteer.volunteers,
-                          organization_id: selectedVolunteer.organization,
+                          organization_id: selectedVolunteer.organization.id,
                         },
                       })
                     }
@@ -316,9 +303,29 @@ const SearchScreen = () => {
             {selectedItem && (
               <>
                 <Text style={styles.modalText}>
-                  שם: {selectedItem.firstName} {selectedItem.lastName}
+                  שם: {selectedItem.first_name} {selectedItem.last_name}
                 </Text>
                 <Button title="סגור" onPress={() => setSelectedItem(null)} />
+                {!selectedItem.friends.map(String).includes(String(userid)) && (
+                  <Button
+                    title="הוסף חבר"
+                    onPress={async () => {
+                      try {
+                        const response = await fetch(`http://10.0.2.2:8000/api/account/users/${selectedItem.id}/friendrequest/`, {
+                          headers: { Authorization: `Bearer ${token}` },
+                          method: 'POST',
+                        });
+                        if (response.ok) {
+                          console.log("success");
+                        } else {
+                          console.error("error");
+                        }
+                      } catch (error) {
+                        console.error(error);
+                      }
+                    }
+                  }
+                />)} 
               </>
             )}
           </View>

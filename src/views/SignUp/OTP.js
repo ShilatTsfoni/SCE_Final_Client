@@ -9,7 +9,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../../contexts/AuthContext";
 import {UserContext } from "../../contexts/userContext";
 import { useFocusEffect } from '@react-navigation/native';
-
+import TokenContext, {
+  tokenContext,
+  TokenProvider
+} from '../../contexts/TokenContext' // Import the TokenProvider
 export const handleLogout = async (setIsAuthenticated) => {
   try {
     // Clear user token from AsyncStorage
@@ -30,6 +33,7 @@ function OTP({ route }) {
   const navigation = useNavigation();
   const { setIsAuthenticated } = useContext(AuthContext);
   const {setUserid,setFirst_name,setLast_name,setEmail,setCity,setVolunteer_frequency,setVolunteer_categories,setMost_important,setAllow_notifications,setFriends,setPhone,setBirthday} = useContext(UserContext );
+  const { token, setToken } = useContext(TokenContext)
   const handleOtpChange = (otp) => {
     setOtp(otp);
     setIsValidOtp(otp.length === 6);
@@ -107,6 +111,7 @@ function OTP({ route }) {
               setFriends(data.friends.toString());
               setPhone(data.phone)
               setBirthday(data.birth_day)
+              setToken(data.token)
             }
             );
           }

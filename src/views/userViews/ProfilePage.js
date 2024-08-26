@@ -33,7 +33,7 @@ const ProfilePage = () => {
   const [skills, setSkills] = useState(["לארוז חבילות", "כיכר החטופים"]);
   const [importance, setImportance] = useState("");
 
-  const {userid,first_name,last_name,phone,email,gender,location,birthday,setAllow_notifications} = useContext(UserContext);
+  const {userid,first_name,last_name,phone,email,gender,city,birthday,setAllow_notifications} = useContext(UserContext);
   const {token} = useContext(TokenContext);
   useEffect(() => {
     // Fetch cities data from the server
@@ -150,8 +150,8 @@ const ProfilePage = () => {
           />
             <View>
               <SelectList
-              placeholder={`${location}`}
-              defaultValue = {`${location}`}
+              placeholder={`${city}`}
+              defaultValue = {`${city}`}
               searchPlaceholder="חיפוש"
               setSelected={handleCityNameChange}
               data={cities}
