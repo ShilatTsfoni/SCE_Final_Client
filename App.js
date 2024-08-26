@@ -23,7 +23,7 @@ export function AppContent() {
   const [isReady, setIsReady] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const { token, setToken } = useContext(TokenContext);
-  const {setUserid,setFirst_name,setLast_name,setEmail,setCity,setVolunteer_frequency,setVolunteer_categories,setMost_important,setAllow_notifications,setFriends} = useContext(UserContext );
+  const {setUserid,setFirst_name,setLast_name,setEmail,setCity,setVolunteer_frequency,setVolunteer_categories,setMost_important,setAllow_notifications,setFriends,setPhone,setBirthday} = useContext(UserContext );
 
   useEffect(() => {
     async function prepare() {
@@ -80,6 +80,8 @@ export function AppContent() {
           await AsyncStorage.setItem("allow_notifications", data.allow_notifications.toString());
           await AsyncStorage.setItem("most_important", data.most_important);
           await AsyncStorage.setItem("friends", data.friends.toString());
+          await AsyncStorage.setItem("phone", data.phone);
+          await AsyncStorage.setItem("birthday", data.birth_day);
           setFirst_name(data.first_name);
           setLast_name(data.last_name);
           setEmail(data.email);
@@ -89,6 +91,8 @@ export function AppContent() {
           setMost_important(data.most_important);
           setAllow_notifications(data.allow_notifications.toString());
           setFriends(data.friends.toString());
+          setPhone(data.phone)
+          setBirthday(data.birth_day)
         }
         );
         await SplashScreen.hideAsync();

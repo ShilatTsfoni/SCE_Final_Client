@@ -29,7 +29,7 @@ function OTP({ route }) {
   const { phone } = route.params;
   const navigation = useNavigation();
   const { setIsAuthenticated } = useContext(AuthContext);
-  const {setUserid,setFirst_name,setLast_name,setEmail,setCity,setVolunteer_frequency,setVolunteer_categories,setMost_important,setAllow_notifications,setFriends} = useContext(UserContext );
+  const {setUserid,setFirst_name,setLast_name,setEmail,setCity,setVolunteer_frequency,setVolunteer_categories,setMost_important,setAllow_notifications,setFriends,setPhone,setBirthday} = useContext(UserContext );
   const handleOtpChange = (otp) => {
     setOtp(otp);
     setIsValidOtp(otp.length === 6);
@@ -94,6 +94,8 @@ function OTP({ route }) {
               await AsyncStorage.setItem("allow_notifications", data.allow_notifications.toString());
               await AsyncStorage.setItem("most_important", data.most_important);
               await AsyncStorage.setItem("friends", data.friends.toString());
+              await AsyncStorage.setItem("phone", data.friends.toString());
+              await AsyncStorage.setItem("birthday", data.birth_day);
               setFirst_name(data.first_name);
               setLast_name(data.last_name);
               setEmail(data.email);
@@ -103,6 +105,8 @@ function OTP({ route }) {
               setMost_important(data.most_important);
               setAllow_notifications(data.allow_notifications.toString());
               setFriends(data.friends.toString());
+              setPhone(data.phone)
+              setBirthday(data.birth_day)
             }
             );
           }

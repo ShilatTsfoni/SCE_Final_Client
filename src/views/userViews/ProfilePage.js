@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext ,useEffect} from "react";
 import {
   View,
   Text,
@@ -12,8 +12,15 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Picker } from "@react-native-picker/picker";
 import profilePic from "../../../assets/images/profile1.jpg";
+import { UserContext } from "../../contexts/userContext"; // Corrected import
+import TokenContext from "../../contexts/TokenContext";
+import { SelectList } from "react-native-dropdown-select-list";
+import CustomButton from "../../components/CustomButton";
 
 const ProfilePage = () => {
+  const [CityName, setCityName] = useState("");
+  const [isEnteredCityName, setIsEnteredCityName] = useState(false);
+  const [cities, setCities] = useState([]);
   const [personalDetailsVisible, setPersonalDetailsVisible] = useState(false);
   const [volunteerPreferencesVisible, setVolunteerPreferencesVisible] =
     useState(false);
@@ -26,6 +33,63 @@ const ProfilePage = () => {
   const [skills, setSkills] = useState(["לארוז חבילות", "כיכר החטופים"]);
   const [importance, setImportance] = useState("");
 
+  const {userid,first_name,last_name,phone,email,gender,location,birthday,setAllow_notifications} = useContext(UserContext);
+  const {token} = useContext(TokenContext);
+  useEffect(() => {
+    // Fetch cities data from the server
+    fetchCities();
+  }, []);
+  const fetchCities = async () => {
+    try {
+      const response = await fetch("http://10.0.2.2:8000/api/account/cities/");
+      if (response.ok) {
+        const data = await response.json();
+        // Update cities state with the fetched data
+        setCities(data);
+      } else {
+        console.error("Failed to fetch cities data");
+      }
+    } catch (error) {
+      console.error("Error fetching cities data:", error);
+    }
+  };
+  const handleCityNameChange = (city) => {
+    setCityName(city);
+    setIsEnteredCityName(true);
+    console.log("Selected city: ", city);
+  };
+  const handlePersonalUpdate = () => {
+    if (CityName) {
+      const url = "http://10.0.2.2:8000/api/account/update/" + userid + "/";
+      const data = {
+        city: CityName,
+      };
+      fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization":`Bearer ${token}`,
+        },
+        body: JSON.stringify(data),})
+    }
+  };
+  const handleNotificationUpdate = (value) => {
+    setNotificationsEnabled(value)
+    const url = "http://10.0.2.2:8000/api/account/update/" + userid + "/";
+    const data = {
+      allow_notifications: !notificationsEnabled,
+    };
+    const response = fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+        "Authorization":`Bearer ${token}`,
+      },
+      body: JSON.stringify(data),})
+    if (response.ok){
+      setAllow_notifications(!notificationsEnabled)
+    }
+  };
   const toggleSkill = (skill) => {
     if (skills.includes(skill)) {
       setSkills(skills.filter((item) => item !== skill));
@@ -54,12 +118,13 @@ const ProfilePage = () => {
               <TextInput
                 style={styles.input}
                 placeholder="שם מלא"
-                defaultValue="יעל כהן"
+                defaultValue ={`${first_name} ${last_name}`}
+                editable={false}  // This makes the TextInput read-only
               />
               <TextInput
                 style={styles.input}
                 placeholder="טלפון"
-                defaultValue="050-1234567"
+                defaultValue={`${phone}`}
                 editable={false}
               />
             </View>
@@ -68,23 +133,44 @@ const ProfilePage = () => {
           <TextInput
             style={styles.input}
             placeholder="אימייל"
-            defaultValue="yael@example.com"
+            defaultValue={`${email}`}
+            editable={false}
           />
           <TextInput
             style={styles.input}
             placeholder="מין"
-            defaultValue="נקבה"
+            defaultValue={`${gender}`}
+            editable={false}
           />
           <TextInput
             style={styles.input}
             placeholder="תאריך לידה"
-            defaultValue="01/01/1990"
+            defaultValue={`${birthday}`}
+            editable={false}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="עיר מגורים"
-            defaultValue="תל אביב"
+            <View>
+              <SelectList
+              placeholder={`${location}`}
+              defaultValue = {`${location}`}
+              searchPlaceholder="חיפוש"
+              setSelected={handleCityNameChange}
+              data={cities}
+              save="value"
+              fontFamily="Assistant"
+              boxStyles={styles.input}
+              dropdownItemStyles={styles.dropdown}
+              arrowAlign="left"
+            />
+            <CustomButton
+            style={styles.button}
+            title="שמור"
+            onPress={handlePersonalUpdate}
+            buttonColor={isEnteredCityName ? "#1355CB" : "#B9B9C9"}
+            textColor={isEnteredCityName ? "#FFFFFF" : "#5C5C66"}
+            borderColor={isEnteredCityName ? "#1355CB" : "#B9B9C9"}
+            disabled={!isEnteredCityName}
           />
+          </View>
         </View>
       )}
 
@@ -162,15 +248,12 @@ const ProfilePage = () => {
       <View style={styles.switchCategory}>
         <Switch
           value={notificationsEnabled}
-          onValueChange={setNotificationsEnabled}
+          onValueChange={handleNotificationUpdate}
         />
         <Text style={styles.categoryTitle}>התראות</Text>
       </View>
 
-      <View style={styles.switchCategory}>
-        <Switch value={contactsEnabled} onValueChange={setContactsEnabled} />
-        <Text style={styles.categoryTitle}>הוספת אנשי קשר</Text>
-      </View>
+
 
       <TouchableOpacity
         style={styles.category}
